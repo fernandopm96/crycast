@@ -1,10 +1,16 @@
 package com.example.crycast.ui.theme
 
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import com.example.crycast.viewmodel.ThemeViewModel
+
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 private val DarkColorPalette = darkColors(
         primary = Purple200,
@@ -14,7 +20,7 @@ private val DarkColorPalette = darkColors(
 
 private val LightColorPalette = lightColors(
         primary = Purple500,
-        primaryVariant = Purple700,
+        primaryVariant = Teal200,
         secondary = Teal200
 
         /* Other default colors to override
@@ -28,15 +34,12 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun CrycastTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+fun CrycastTheme(
+    darkTheme: Boolean,
+    content: @Composable() () -> Unit) {
 
     MaterialTheme(
-            colors = colors,
+            colors = if(darkTheme) DarkColorPalette else LightColorPalette,
             typography = Typography,
             shapes = Shapes,
             content = content
