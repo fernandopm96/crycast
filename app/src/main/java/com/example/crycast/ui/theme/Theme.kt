@@ -35,11 +35,11 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun CrycastTheme(
-    darkTheme: Boolean,
+//    darkTheme: Boolean,
     content: @Composable() () -> Unit) {
 
     MaterialTheme(
-            colors = if(darkTheme) DarkColorPalette else LightColorPalette,
+            colors = if(isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
             typography = Typography,
             shapes = Shapes,
             content = content

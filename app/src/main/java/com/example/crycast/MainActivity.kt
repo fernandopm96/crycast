@@ -22,22 +22,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val darkTheme=viewModel.darkTheme.observeAsState(initial = true)
-            CrycastTheme (darkTheme.value) {
-            }
-            IconButton(onClick = {
-                viewModel.themeChange()
-
-            }) {
-                Icon(painter = painterResource(R.drawable.moon), contentDescription = "Change theme")
+         //   val darkTheme=viewModel.darkTheme.observeAsState(initial = true)
+            CrycastTheme () {
+                GetMainScaffold()
 
             }
-            /*
-                GetMainScaffold()*/
-
-                // A surface container using the 'background' color from the theme
-
-
 
         }
     }

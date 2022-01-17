@@ -11,11 +11,8 @@ import com.example.crycast.viewmodel.ThemeViewModel
 
 @Composable
 fun GetMainScaffold(){
-    val themeViewModel: ThemeViewModel = viewModel()
-    val navigationItems = listOf(
-        "Perfil",
-        "Opciones"
-    )
+   // val themeViewModel: ThemeViewModel = viewModel()
+
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(DrawerValue.Closed)
     )
@@ -25,8 +22,9 @@ fun GetMainScaffold(){
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = { MenuSuperiorPrincipal(scope, scaffoldState) },
-        drawerContent = { DesplegableOpciones(scope, scaffoldState)}
-    ) {
-
-    }
+        drawerContent = { DesplegableOpciones(scope, scaffoldState)},
+        content ={
+            Conversaciones()
+        }
+    )
 }
