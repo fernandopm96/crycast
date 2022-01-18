@@ -1,28 +1,34 @@
 package com.example.crycast.ui.theme
 
 import android.util.Log
-import androidx.activity.viewModels
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.graphics.Color
 import com.example.crycast.viewmodel.ThemeViewModel
-
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 private val DarkColorPalette = darkColors(
-        primary = Purple200,
-        primaryVariant = Purple700,
+        primary = PrimaryDark,
+        onPrimary = Color.White,
+     //   primaryVariant = Color.Blue,
+        secondary = PrimaryLight,
+    onSecondary = Color.White,
+    background = ContentDark,
+    surface = PrimaryDark,
+    onSurface = Color.White
+)
+//primaryVariant = PrimaryDarkVariant,
+private val LightColorPalette = lightColors(
+        primary = PrimaryLight,
+
+        primaryVariant = PrimaryLightVariant,
         secondary = Teal200
 )
-
-private val LightColorPalette = lightColors(
-        primary = Purple500,
-        primaryVariant = Teal200,
-        secondary = Teal200
-
         /* Other default colors to override
     background = Color.White,
     surface = Color.White,
@@ -31,15 +37,20 @@ private val LightColorPalette = lightColors(
     onBackground = Color.Black,
     onSurface = Color.Black,
     */
-)
 
 @Composable
 fun CrycastTheme(
-//    darkTheme: Boolean,
-    content: @Composable() () -> Unit) {
+    content: @Composable() () -> Unit
+) {
+
+    var themeViewModel: ThemeViewModel = viewModel()
+
+    val theme = themeViewModel.dataStoreTheme.collectAsState("").value
+    Log.i("THEME", theme.toString())
+
 
     MaterialTheme(
-            colors = if(isSystemInDarkTheme()) DarkColorPalette else LightColorPalette,
+            colors = if(theme.equals("LIGHT")) LightColorPalette else DarkColorPalette,
             typography = Typography,
             shapes = Shapes,
             content = content

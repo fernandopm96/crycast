@@ -26,7 +26,7 @@ fun DesplegableOpciones(
     scope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
-//    val themeViewModel: ThemeViewModel = viewModel()
+    val themeViewModel: ThemeViewModel = viewModel()
     Column (
         modifier = Modifier.height(400.dp)
             ){
@@ -48,7 +48,10 @@ fun DesplegableOpciones(
             }
             IconButton(modifier = Modifier.absolutePadding(0.dp,10.dp, 10.dp, 0.dp),
                 onClick = {
-                //themeViewModel.themeChange(themeViewModel.theme.toString())
+                    scope.launch {
+                        themeViewModel.themeChange()
+                        Log.i("BOTON","CAMBIA TEMA")
+                    }
             }) {
                 Icon(painter = painterResource(R.drawable.moon), contentDescription = "Change theme")
 

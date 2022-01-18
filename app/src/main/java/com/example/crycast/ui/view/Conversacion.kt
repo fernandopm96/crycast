@@ -1,6 +1,7 @@
 package com.example.crycast.ui.view
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
@@ -13,13 +14,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.crycast.R
+import com.example.crycast.ui.Screen
 
 @Composable
-fun Conversacion(msg: String){
+fun Conversacion(msg: String, navHostController: NavHostController){
     Row(modifier = Modifier
         .fillMaxWidth()
-        .height(80.dp)) {
+        .height(80.dp)
+        .clickable {
+            navHostController.navigate(Screen.ViewConversation.route)
+        }) {
        Column(
            verticalArrangement = Arrangement.Center,
            modifier = Modifier
@@ -33,7 +39,8 @@ fun Conversacion(msg: String){
                     .height(50.dp)
                     .width(50.dp)
                     .clip(CircleShape),
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillWidth,
+
             )
         }
         Column(

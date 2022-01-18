@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 
 //Provisional
 val conversaciones = listOf<String>(
@@ -15,10 +16,10 @@ val conversaciones = listOf<String>(
     "asdflkjañs",
 )
 @Composable
-fun Conversaciones(){
+fun Conversaciones(navHostController: NavHostController){
     Column(modifier = Modifier.fillMaxHeight()){
         conversaciones.forEach {
-            Conversacion(it)
+            Conversacion(it, navHostController)
             Divider()
         }
     }
