@@ -11,13 +11,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.crycast.ui.theme.CrycastTheme
 import com.example.crycast.ui.view.SetupNav
 import com.example.crycast.viewmodel.ThemeViewModel
+import com.example.crycast.viewmodel.ViewModel
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel: ThemeViewModel by viewModels()
+        val themeViewModel: ThemeViewModel by viewModels()
+        val viewModel: ViewModel by viewModels()
 
         setContent {
 
