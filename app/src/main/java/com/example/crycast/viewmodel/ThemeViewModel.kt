@@ -16,12 +16,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
+enum class Theme {
+    LIGHT,
+    DARK
+}
 class ThemeViewModel(application: Application) : AndroidViewModel(application){
 
- /*   private val _theme:MutableLiveData<String> = MutableLiveData<String>("Auto")
-    val theme: LiveData<String> = _theme
-    private val _darkTheme:MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
-    val darkTheme: LiveData<Boolean> = _darkTheme*/
     companion object{
          private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("darkMode")
          val THEME = stringPreferencesKey("THEME")
@@ -30,13 +30,10 @@ class ThemeViewModel(application: Application) : AndroidViewModel(application){
 
     val dataStoreTheme: Flow<String?> = application.applicationContext.dataStore.data
         .map { preferences ->
-        preferences[THEME] ?: ""
+        preferences[THEME] ?: "LIGHT"
     }
-
- //   val theme: MutableLiveData<String?> = MutableLiveData()
-
-
     suspend fun themeChange() {
+        Log.i("DATA STORE THEME", dataStoreTheme.first().toString())
         when(dataStoreTheme.first()){
             "LIGHT" ->  saveTheme(Theme.DARK)
             "DARK" -> saveTheme(Theme.LIGHT)
@@ -53,9 +50,4 @@ class ThemeViewModel(application: Application) : AndroidViewModel(application){
             preferences[THEME] = theme.name
         }
     }
-}
-
-enum class Theme {
-    LIGHT,
-    DARK
 }

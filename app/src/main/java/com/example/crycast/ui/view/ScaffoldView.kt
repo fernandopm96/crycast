@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.crycast.R
 import com.example.crycast.viewmodel.ThemeViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun GetMainScaffold(navHostController: NavHostController){
@@ -22,11 +23,16 @@ fun GetMainScaffold(navHostController: NavHostController){
     )
     val scope = rememberCoroutineScope()
     val activity = LocalContext.current as Activity
+
     BackHandler() {
-        activity.moveTaskToBack(true)
+        if(scaffoldState.drawerState.isClosed)
+            activity.moveTaskToBack(true)
+        else
+            scope.launch{scaffoldState.drawerState.close()}
     }
 
     Scaffold(
+
         scaffoldState = scaffoldState,
         topBar = { MenuSuperiorPrincipal(scope, scaffoldState) },
         drawerContent = { DesplegableOpciones(scope, scaffoldState)},
