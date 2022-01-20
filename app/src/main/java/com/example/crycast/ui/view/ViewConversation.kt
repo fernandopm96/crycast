@@ -34,9 +34,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.crycast.R
 import com.example.crycast.ui.Screen
+import com.example.crycast.ui.theme.GrayMessages
 import com.example.crycast.viewmodel.ViewModel
-import com.google.mlkit.vision.text.Text
-import kotlinx.coroutines.launch
 
 @Composable
 fun TopBarConversation(navHostController: NavHostController){
@@ -93,7 +92,10 @@ fun CustomTextField(){
     val messages by viewModel.messages.observeAsState()
     TextField(
         value = value,
-        onValueChange = { value = it},
+        onValueChange = {
+            if(it.length == 25)
+                it.plus("\n")
+            value = it},
         maxLines = 5,
         modifier = Modifier
             .fillMaxWidth()
@@ -133,7 +135,7 @@ fun ViewConversation(navHostController: NavHostController){
             horizontalAlignment = Alignment.End
         ) {
             items(messages!!) {
-                MessageBox(string = it)
+                MessageBox(it)
 
             }
         }
@@ -143,24 +145,65 @@ fun ViewConversation(navHostController: NavHostController){
 
 
 @Composable
-fun MessageBox(string: String){
-    Box(
-        modifier = Modifier
-            .width(300.dp)
-            .padding(10.dp)
-            .background(Color.LightGray)
-            .clip(shape = RoundedCornerShape(5.dp)),
-        contentAlignment = Alignment.CenterEnd
+fun MessageBox(msg: String){
 
-    ) {
-        Text(
-            text = string + "\n",
-            color = Color.Black,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 14.sp,
-            textAlign = TextAlign.End,
-        )
+  /*  var lines: MutableList<String> = mutableListOf()
+    if(msg.length >25) {
+        var inicio = 0
+        var fin = 25
+        while(msg.length > fin){
+            lines.add(msg.substring(inicio, fin))
+            inicio += 25
+            fin += 25
+        }
+        if(msg.length > inicio){
+            lines.add(msg.substring(inicio, msg.length))
+        }
 
     }
+    var message = ""
+    lines.forEach {
+        message += it + "\n"
+    }*/
+        var paddingLeftHora = 0
+        Box(
+
+            modifier = Modifier
+                //.weight(0.8f)
+                .widthIn(200.dp, 300.dp)
+                .padding(10.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = msg,
+                    color = Color.Black,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier
+                    //    .absolutePadding(10.dp, 5.dp, 5.dp, 5.dp)
+                        .align(Alignment.Top)
+                )
+                Text(
+                    text = "10:35",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 12.sp,
+                    modifier = Modifier
+                   //     .absolutePadding(50.dp, 20.dp, 5.dp, 0.dp)
+                        .align(Alignment.Bottom)
+                )
+            }
+
+        }
+
+
+
+
+
 
 }
