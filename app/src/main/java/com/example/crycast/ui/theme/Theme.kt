@@ -1,5 +1,6 @@
 package com.example.crycast.ui.theme
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
@@ -12,22 +13,25 @@ import androidx.compose.ui.graphics.Color
 import com.example.crycast.viewmodel.ThemeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
         primary = PrimaryDark,
         onPrimary = Color.White,
-     //   primaryVariant = Color.Blue,
         secondary = PrimaryLight,
     onSecondary = Color.White,
-    background = ContentDark,
+    background = SecondaryLight,
     surface = PrimaryDark,
     onSurface = Color.White
 )
 //primaryVariant = PrimaryDarkVariant,
 private val LightColorPalette = lightColors(
         primary = PrimaryLight,
-
         primaryVariant = PrimaryLightVariant,
-        secondary = Teal200
+        secondary = Teal200,
+        onSecondary = Color.Black,
+        background = Color.White,
+    onBackground = Color.Black,
+        surface = PrimaryLightVariant,
 )
         /* Other default colors to override
     background = Color.White,

@@ -2,6 +2,7 @@ package com.example.crycast.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+val GrayMessages = Color(0xFFDFDFDF)
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
 val Purple700 = Color(0xFF3700B3)
@@ -13,4 +14,3 @@ val PrimaryLight = Color(0xFF42BEF1)
 val PrimaryLightVariant = Color(0xFF38A0CB)
 val SecondaryLight = Color(0xFF184558)
 val ContentDark = Color(0xFF0A1D24)
-val GrayMessages = Color(0xE5E8E8)

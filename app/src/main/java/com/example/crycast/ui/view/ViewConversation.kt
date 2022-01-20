@@ -35,8 +35,10 @@ import androidx.navigation.NavHostController
 import com.example.crycast.R
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.GrayMessages
+import com.example.crycast.ui.theme.PrimaryDarkVariant
 import com.example.crycast.viewmodel.ViewModel
 
+// Barra superior
 @Composable
 fun TopBarConversation(navHostController: NavHostController){
 
@@ -59,7 +61,9 @@ fun TopBarConversation(navHostController: NavHostController){
             }
             Column(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.absolutePadding(20.dp)) {
+            modifier = Modifier
+                .absolutePadding(20.dp)
+                .clickable { navHostController.navigate(Screen.ViewProfile.route) }) {
                 Text(text = "Godofredo")
                 Text(text = "últ. hora: 20:45", fontSize = 12.sp)
             }
@@ -85,6 +89,7 @@ fun TopBarConversation(navHostController: NavHostController){
     )
 }
 
+// TextField para enviar mensaje
 @Composable
 fun CustomTextField(){
     var value by remember { mutableStateOf("") }
@@ -119,7 +124,7 @@ fun CustomTextField(){
 }
 
 
-
+// Vista conversación(Scaffold: topbar + LazyColumn + textfield)
 @Composable
 fun ViewConversation(navHostController: NavHostController){
     val viewModel: ViewModel = viewModel()
@@ -143,67 +148,39 @@ fun ViewConversation(navHostController: NavHostController){
 }
 
 
-
+// Formato de mensaje
 @Composable
 fun MessageBox(msg: String){
 
-  /*  var lines: MutableList<String> = mutableListOf()
-    if(msg.length >25) {
-        var inicio = 0
-        var fin = 25
-        while(msg.length > fin){
-            lines.add(msg.substring(inicio, fin))
-            inicio += 25
-            fin += 25
-        }
-        if(msg.length > inicio){
-            lines.add(msg.substring(inicio, msg.length))
-        }
 
-    }
-    var message = ""
-    lines.forEach {
-        message += it + "\n"
-    }*/
         var paddingLeftHora = 0
         Box(
-
             modifier = Modifier
-                //.weight(0.8f)
-                .widthIn(200.dp, 300.dp)
-                .padding(10.dp)
-                .background(color = Color.White, shape = RoundedCornerShape(10.dp)),
-            contentAlignment = Alignment.CenterStart
+                .widthIn(100.dp, 300.dp)
+                .padding(5.dp)
+                .background(color = GrayMessages, shape = RoundedCornerShape(10.dp)),
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+
                 Text(
                     text = msg,
                     color = Color.Black,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
-                    textAlign = TextAlign.Justify,
                     modifier = Modifier
-                    //    .absolutePadding(10.dp, 5.dp, 5.dp, 5.dp)
-                        .align(Alignment.Top)
+                        .absolutePadding(15.dp, 5.dp, 20.dp, 5.dp)
+                        .align(Alignment.TopStart)
                 )
                 Text(
                     text = "10:35",
                     color = Color.Black,
                     fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
+                    fontSize = 10.sp,
                     modifier = Modifier
-                   //     .absolutePadding(50.dp, 20.dp, 5.dp, 0.dp)
-                        .align(Alignment.Bottom)
+                        .absolutePadding(30.dp, 30.dp, 10.dp, 5.dp)
+                        .align(Alignment.BottomEnd)
                 )
-            }
+
 
         }
-
-
-
-
-
 
 }
