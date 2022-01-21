@@ -1,5 +1,6 @@
 package com.example.crycast
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,10 +9,15 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.example.crycast.repository.UserRepository
 import com.example.crycast.ui.theme.CrycastTheme
 import com.example.crycast.ui.view.SetupNav
 import com.example.crycast.viewmodel.ThemeViewModel
 import com.example.crycast.viewmodel.ViewModel
+import kotlinx.coroutines.runBlocking
+
+lateinit var repository: UserRepository
+
 
 class MainActivity : ComponentActivity() {
 
@@ -30,12 +36,13 @@ class MainActivity : ComponentActivity() {
 
         }
 
+
     }
 
 
 
-
 }
+
 
 @Composable
 fun Greeting(name: String) {
@@ -45,8 +52,5 @@ fun Greeting(name: String) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    /*
-    CrycastTheme(viewModel) {
-        GetMainScaffold()
-    }*/
+
 }

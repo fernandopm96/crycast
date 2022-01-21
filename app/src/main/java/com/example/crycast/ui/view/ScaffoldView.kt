@@ -34,7 +34,7 @@ fun GetMainScaffold(navHostController: NavHostController){
     Scaffold(
 
         scaffoldState = scaffoldState,
-        topBar = { MenuSuperiorPrincipal(scope, scaffoldState) },
+        topBar = { MenuSuperiorPrincipal(scope, scaffoldState, navHostController) },
         drawerContent = { DesplegableOpciones(scope, scaffoldState)},
         content ={
             Conversaciones(navHostController)

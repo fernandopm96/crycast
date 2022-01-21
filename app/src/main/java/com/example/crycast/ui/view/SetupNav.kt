@@ -25,5 +25,8 @@ fun SetupNav(navController: NavHostController){
         composable(route = Screen.ViewProfile.route){
             ProfileView(controller = navController)
         }
+        composable(route = Screen.CreateUser.route){
+            crearUsuario(navController)
+        }
     }
 }

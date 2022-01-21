@@ -1,11 +1,16 @@
 package com.example.crycast.ui.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.crycast.viewmodel.ViewModel
 
 //Provisional
 val conversaciones = listOf<String>(
@@ -15,12 +20,21 @@ val conversaciones = listOf<String>(
     "aaaaasdlk",
     "asdflkjañs",
 )
+
 @Composable
 fun Conversaciones(navHostController: NavHostController){
+    val viewModel: ViewModel = viewModel()
+    val users by viewModel.allUsers.observeAsState()
+
     Column(modifier = Modifier.fillMaxHeight()){
-        conversaciones.forEach {
-            Conversacion(it, navHostController)
-            Divider()
+
+        users?.let { usersList ->
+
+            usersList.forEach{
+                Log.i("USUARIO",it.name )
+                Conversacion(msg = it.name, navHostController = navHostController)
+                Divider()
+            }
         }
     }
 }

@@ -48,8 +48,8 @@ fun Conversacion(msg: String, navHostController: NavHostController){
             modifier = Modifier
             .fillMaxHeight()
             .weight(0.6f)) {
-            Text("Nombre", fontSize = (16.sp), modifier = Modifier.absolutePadding(10.dp,15.dp,0.dp, 0.dp))
-            Text(msg, fontSize = (13.sp), modifier = Modifier.absolutePadding(10.dp,0.dp,0.dp, 15.dp))
+            Text(msg, fontSize = (16.sp), modifier = Modifier.absolutePadding(10.dp,15.dp,0.dp, 0.dp))
+            Text("últ. mensaje", fontSize = (13.sp), modifier = Modifier.absolutePadding(10.dp,0.dp,0.dp, 15.dp))
         }
         Column(
             verticalArrangement = Arrangement.Center,

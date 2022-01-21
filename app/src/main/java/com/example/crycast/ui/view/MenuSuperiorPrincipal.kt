@@ -8,6 +8,8 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
+import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.CrycastTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -17,7 +19,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuSuperiorPrincipal(
     scope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
+    navHostController: NavHostController
 ){
     TopAppBar(
         title = { Text(text = "CryCast")},
@@ -33,7 +36,7 @@ fun MenuSuperiorPrincipal(
         backgroundColor = MaterialTheme.colors.primary,
         actions = {
             IconButton(onClick = {
-                /*TODO*/
+                navHostController.navigate(Screen.CreateUser.route)
             }) {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
             }
