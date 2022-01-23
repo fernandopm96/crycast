@@ -11,17 +11,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.crycast.R
+import com.example.crycast.model.User
 import com.example.crycast.viewmodel.ThemeViewModel
+import com.example.crycast.viewmodel.ViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun GetMainScaffold(navHostController: NavHostController){
-    val themeViewModel: ThemeViewModel = viewModel()
+fun GetMainScaffold(){
+    val scope = rememberCoroutineScope()
 
     val scaffoldState = rememberScaffoldState(
         drawerState = rememberDrawerState(DrawerValue.Closed)
     )
-    val scope = rememberCoroutineScope()
+
     val activity = LocalContext.current as Activity
 
     BackHandler() {
@@ -34,10 +37,10 @@ fun GetMainScaffold(navHostController: NavHostController){
     Scaffold(
 
         scaffoldState = scaffoldState,
-        topBar = { MenuSuperiorPrincipal(scope, scaffoldState, navHostController) },
+        topBar = { MenuSuperiorPrincipal(scope, scaffoldState) },
         drawerContent = { DesplegableOpciones(scope, scaffoldState)},
         content ={
-            Conversaciones(navHostController)
+            Conversaciones()
         }
     )
 }

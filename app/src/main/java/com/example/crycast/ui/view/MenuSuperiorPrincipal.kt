@@ -19,8 +19,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun MenuSuperiorPrincipal(
     scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    navHostController: NavHostController
+    scaffoldState: ScaffoldState
 ){
     TopAppBar(
         title = { Text(text = "CryCast")},

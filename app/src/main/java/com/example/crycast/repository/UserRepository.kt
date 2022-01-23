@@ -4,13 +4,17 @@ import androidx.lifecycle.LiveData
 
 import com.example.crycast.dao.UserDao
 import com.example.crycast.model.User
+import com.example.crycast.model.UserWithMessages
 
 class UserRepository(private val userDao: UserDao) {
 
-    val getAllUsers: LiveData<List<User>> = userDao.getAllUsers()
+    val getAllUsers: LiveData<List<UserWithMessages>> = userDao.getAllUsers()
 
-    fun getUserById(id: Int): User? {
+    fun getUserById(id: Int): UserWithMessages? {
         return userDao.getUserById(id)
+    }
+    fun getUserByName(name: String): UserWithMessages? {
+        return userDao.getUserByName(name)
     }
 
     suspend fun addUser(user: User){

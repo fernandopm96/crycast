@@ -12,27 +12,19 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.crycast.viewmodel.ViewModel
 
-//Provisional
-val conversaciones = listOf<String>(
-    "Hola",
-    "Adiós",
-    "asdflkja",
-    "aaaaasdlk",
-    "asdflkjañs",
-)
 
 @Composable
-fun Conversaciones(navHostController: NavHostController){
+fun Conversaciones(){
     val viewModel: ViewModel = viewModel()
     val users by viewModel.allUsers.observeAsState()
 
     Column(modifier = Modifier.fillMaxHeight()){
 
+
         users?.let { usersList ->
 
             usersList.forEach{
-                Log.i("USUARIO",it.name )
-                Conversacion(msg = it.name, navHostController = navHostController)
+                Conversacion(it.user)
                 Divider()
             }
         }

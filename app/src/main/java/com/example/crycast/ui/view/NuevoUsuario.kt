@@ -3,10 +3,7 @@ package com.example.crycast.ui.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,15 +11,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.crycast.model.User
+import com.example.crycast.ui.Screen
 import com.example.crycast.viewmodel.ViewModel
 import kotlinx.coroutines.launch
 
 // Provisional para añadir usuarios a la base de datos, y visualizarlos en la interfaz
 
-lateinit var controller: NavHostController
+
 @Composable
-fun crearUsuario(navHostController: NavHostController){
-    controller = navHostController
+fun crearUsuario(){
     val scope = rememberCoroutineScope()
     var viewModel: ViewModel = viewModel()
     var idText by remember { mutableStateOf("") }
@@ -37,9 +34,6 @@ fun crearUsuario(navHostController: NavHostController){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
             ) {
-            TextField(value = idText, onValueChange = {
-                idText = it
-            }, modifier = Modifier.fillMaxWidth())
             TextField(value = name, onValueChange = {
                 name = it
             }, modifier = Modifier.fillMaxWidth())
@@ -49,11 +43,9 @@ fun crearUsuario(navHostController: NavHostController){
             Text(text = infoText)
 
             IconButton(onClick = {
-                if(!idText.isEmpty() || !name.isEmpty() || !email.isEmpty()){
-                    var id: Int? = idText.toIntOrNull()
-                    if(id != null){
+                if(!name.isEmpty() || !email.isEmpty()){
 
-                        var user: User = User(id!!, name, email, null)
+                    var user: User = User(0, name, email, null)
                         scope.launch {
                             viewModel.addUser(user)
                             infoText = "Usuario añadido"
@@ -66,7 +58,6 @@ fun crearUsuario(navHostController: NavHostController){
                         infoText = "Algún campo no es válido"
                     }
 
-                }
             }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
             }
@@ -82,23 +73,14 @@ fun TopBarCreateUser(){
         title = {},
         navigationIcon = {
             IconButton(onClick = {
-                controller.popBackStack()
+                navHostController.popBackStack()
             })
             {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
             }
         },
         backgroundColor = MaterialTheme.colors.primary,
-        modifier = Modifier.height(60.dp),
-        actions = {
-            IconButton(onClick = {
-
-            }) {
-                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Setting")
-            }
-
-        }
-    )
+        modifier = Modifier.height(60.dp))
 
 
 

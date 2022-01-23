@@ -7,7 +7,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +21,7 @@ import com.example.crycast.viewmodel.ThemeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.crycast.viewmodel.ViewModel
 
 @Composable
 fun DesplegableOpciones(
@@ -27,15 +29,17 @@ fun DesplegableOpciones(
     scaffoldState: ScaffoldState
 ) {
     val themeViewModel: ThemeViewModel = viewModel()
+    var viewModel: ViewModel = viewModel()
+    val user = viewModel.profileUser.observeAsState()
     Column (
         modifier = Modifier.height(400.dp)
-            ){
+            ) {
         Row(
             Modifier
                 .fillMaxWidth()
                 .weight(0.3f),
             //    .height(50.dp),
-            horizontalArrangement =Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -46,22 +50,26 @@ fun DesplegableOpciones(
             }) {
                 Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Volver")
             }
-            IconButton(modifier = Modifier.absolutePadding(0.dp,10.dp, 10.dp, 0.dp),
+            IconButton(modifier = Modifier.absolutePadding(0.dp, 10.dp, 10.dp, 0.dp),
                 onClick = {
                     scope.launch {
                         themeViewModel.themeChange()
-                        Log.i("BOTON","CAMBIA TEMA")
+                        Log.i("BOTON", "CAMBIA TEMA")
                     }
-            }) {
-                Icon(painter = painterResource(R.drawable.moon), contentDescription = "Change theme")
+                }) {
+                Icon(
+                    painter = painterResource(R.drawable.moon),
+                    contentDescription = "Change theme"
+                )
 
             }
         }
+
         Row(
             Modifier
                 .fillMaxWidth()
                 .weight(0.8f),
-            horizontalArrangement =Arrangement.Center,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
 
@@ -75,27 +83,29 @@ fun DesplegableOpciones(
                 contentScale = ContentScale.FillWidth
             )
         }
-        Row (
+
+        Row(
             Modifier
                 .fillMaxWidth()
                 .weight(0.4f),
-            horizontalArrangement =Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-                ) {
-            Text("Nombre de usuario")
-        }
-        Row (
-            Modifier
-                .fillMaxWidth()
-                .weight(0.4f),
-            horizontalArrangement =Arrangement.Center,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("Email")
+            Text(user.value!!.name)
         }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .weight(0.4f),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(user.value!!.name)
+        }
+
+
         Divider()
 
-
     }
-
 }
+

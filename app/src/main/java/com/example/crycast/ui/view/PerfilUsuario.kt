@@ -18,10 +18,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.crycast.R
 
-lateinit var navHostController: NavHostController
+
 @Composable
-fun ProfileView(controller: NavHostController){
-    navHostController = controller
+fun ProfileView(){
     Scaffold(
         topBar = { TopBarProfileView()}
     )

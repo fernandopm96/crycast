@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,12 +13,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
+import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
+import com.example.crycast.viewmodel.ViewModel
+
 
 @Composable
-fun Conversacion(msg: String, navHostController: NavHostController){
+fun Conversacion(user: User){
+
+    destinationUser = user
+    var viewModel: ViewModel = viewModel()
     Row(modifier = Modifier
         .fillMaxWidth()
         .height(80.dp)
@@ -48,7 +53,7 @@ fun Conversacion(msg: String, navHostController: NavHostController){
             modifier = Modifier
             .fillMaxHeight()
             .weight(0.6f)) {
-            Text(msg, fontSize = (16.sp), modifier = Modifier.absolutePadding(10.dp,15.dp,0.dp, 0.dp))
+            Text(destinationUser.name, fontSize = (16.sp), modifier = Modifier.absolutePadding(10.dp,15.dp,0.dp, 0.dp))
             Text("últ. mensaje", fontSize = (13.sp), modifier = Modifier.absolutePadding(10.dp,0.dp,0.dp, 15.dp))
         }
         Column(

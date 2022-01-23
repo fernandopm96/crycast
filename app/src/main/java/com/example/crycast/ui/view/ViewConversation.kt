@@ -8,8 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -19,28 +17,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.crycast.R
+import com.example.crycast.model.PrivateMessage
+import com.example.crycast.model.User
+import com.example.crycast.model.UserWithMessages
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.GrayMessages
-import com.example.crycast.ui.theme.PrimaryDarkVariant
 import com.example.crycast.viewmodel.ViewModel
+import kotlinx.coroutines.launch
 
+lateinit var destinationUser: User
 // Barra superior
 @Composable
-fun TopBarConversation(navHostController: NavHostController){
+fun TopBarConversation(){
+    val viewModel: ViewModel = viewModel()
 
     TopAppBar(
 
@@ -64,7 +61,8 @@ fun TopBarConversation(navHostController: NavHostController){
             modifier = Modifier
                 .absolutePadding(20.dp)
                 .clickable { navHostController.navigate(Screen.ViewProfile.route) }) {
-                Text(text = "Godofredo")
+
+                Text(text = destinationUser.name)
                 Text(text = "últ. hora: 20:45", fontSize = 12.sp)
             }
                 },
@@ -92,9 +90,11 @@ fun TopBarConversation(navHostController: NavHostController){
 // TextField para enviar mensaje
 @Composable
 fun CustomTextField(){
+
     var value by remember { mutableStateOf("") }
     val viewModel: ViewModel = viewModel()
-    val messages by viewModel.messages.observeAsState()
+    val scope = rememberCoroutineScope()
+
     TextField(
         value = value,
         onValueChange = {
@@ -113,25 +113,32 @@ fun CustomTextField(){
                     .absolutePadding(0.dp, 0.dp, 20.dp, 0.dp)
                     .clickable {
                         if (value != "") {
-                            Log.i("Mensaje", value)
-                            viewModel.AddMessage(value)
+
+                            var msg = PrivateMessage(
+                                0,
+                                viewModel.currentUser!!.id,
+                                value,
+                                destinationUser.id
+                            )
+                            scope.launch {
+                                viewModel.addMessage(msg)
+                                Log.i("Mensaje registrado", value)
+                            }
                             value = ""
                         }
-
                     })
         }
     )
 }
 
 
-// Vista conversación(Scaffold: topbar + LazyColumn + textfield)
 @Composable
-fun ViewConversation(navHostController: NavHostController){
+fun ViewConversation(){
     val viewModel: ViewModel = viewModel()
-    val messages by viewModel.messages.observeAsState()
+    val messages by viewModel.messagesConversation.observeAsState()
 
     Scaffold(
-        topBar = { TopBarConversation(navHostController = navHostController) },
+        topBar = { TopBarConversation() },
         bottomBar = { CustomTextField() },
     ){
         LazyColumn(
@@ -139,9 +146,10 @@ fun ViewConversation(navHostController: NavHostController){
             state = rememberLazyListState(),
             horizontalAlignment = Alignment.End
         ) {
-            items(messages!!) {
-                MessageBox(it)
-
+            messages?.let{
+                items(messages!!) {
+                    MessageBox(it.text)
+                }
             }
         }
     }
@@ -152,8 +160,6 @@ fun ViewConversation(navHostController: NavHostController){
 @Composable
 fun MessageBox(msg: String){
 
-
-        var paddingLeftHora = 0
         Box(
             modifier = Modifier
                 .widthIn(100.dp, 300.dp)
@@ -182,5 +188,6 @@ fun MessageBox(msg: String){
 
 
         }
-
 }
+
+
