@@ -1,27 +1,92 @@
 package com.example.crycast.ui.view
 
+import android.app.Activity
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
+import com.example.crycast.ui.Screen
 import com.example.crycast.viewmodel.ThemeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.crycast.viewmodel.ViewModel
+
+@Composable
+fun GetMainScaffold(){
+    val scope = rememberCoroutineScope()
+
+    val scaffoldState = rememberScaffoldState(
+        drawerState = rememberDrawerState(DrawerValue.Closed)
+    )
+
+    val activity = LocalContext.current as Activity
+
+    BackHandler() {
+        if(scaffoldState.drawerState.isClosed)
+            activity.moveTaskToBack(true)
+        else
+            scope.launch{scaffoldState.drawerState.close()}
+    }
+
+    Scaffold(
+
+        scaffoldState = scaffoldState,
+        topBar = { MenuSuperiorPrincipal(scope, scaffoldState) },
+        drawerContent = { DesplegableOpciones(scope, scaffoldState)},
+        content ={
+            Conversaciones()
+        }
+    )
+}
+
+// Menú superior de la pantalla principal de la aplicación.
+
+@Composable
+fun MenuSuperiorPrincipal(
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState
+){
+    TopAppBar(
+        title = { Text(text = "CryCast")},
+        navigationIcon = {
+            IconButton(onClick = {
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            }) {
+                Icon(imageVector = Icons.Filled.Menu, contentDescription = "Menu Icon")
+            }
+        },
+        backgroundColor = MaterialTheme.colors.primary,
+        actions = {
+            IconButton(onClick = {
+                navHostController.navigate(Screen.CreateUser.route)
+            }) {
+                Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
+            }
+        }
+    )
+
+
+}
 
 @Composable
 fun DesplegableOpciones(
@@ -29,11 +94,10 @@ fun DesplegableOpciones(
     scaffoldState: ScaffoldState
 ) {
     val themeViewModel: ThemeViewModel = viewModel()
-    var viewModel: ViewModel = viewModel()
-    val user = viewModel.profileUser.observeAsState()
+    var userProfile = remember{ mutableStateOf(currentUser) }
     Column (
         modifier = Modifier.height(400.dp)
-            ) {
+    ) {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -91,7 +155,7 @@ fun DesplegableOpciones(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(user.value!!.name)
+            Text(userProfile.value!!.name)
         }
         Row(
             Modifier
@@ -100,7 +164,7 @@ fun DesplegableOpciones(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(user.value!!.name)
+            Text(userProfile.value!!.mail)
         }
 
 
@@ -108,4 +172,3 @@ fun DesplegableOpciones(
 
     }
 }
-

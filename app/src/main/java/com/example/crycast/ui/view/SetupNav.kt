@@ -1,7 +1,6 @@
 package com.example.crycast.ui.view
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,7 +15,7 @@ fun SetupNav(navController: NavHostController){
         startDestination = Screen.CurrentUser.route
     ){
         composable(route = Screen.CurrentUser.route){
-            currentUser()
+            chooseUser()
         }
         composable(route = Screen.Splash.route){
 

@@ -1,15 +1,20 @@
 package com.example.crycast.dao
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.crycast.model.User
 import com.example.crycast.model.UserWithMessages
 
 @Dao
 interface UserDao {
-    @Transaction
+
     @Query("SELECT * FROM User")
-    fun getAllUsers(): LiveData<List<UserWithMessages>>
+    fun getAllUsers(): List<User>
+
+    @Transaction
+    @Query("SELECT * FROM User u WHERE u.id != :id")
+    fun getUsers(id: Int): LiveData<List<User>>
 
     @Transaction
     @Query("SELECT * FROM User WHERE id = :id")

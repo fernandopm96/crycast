@@ -9,10 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.crycast.model.User
-import com.example.crycast.ui.Screen
-import com.example.crycast.viewmodel.ViewModel
+import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 // Provisional para añadir usuarios a la base de datos, y visualizarlos en la interfaz
@@ -21,7 +19,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun crearUsuario(){
     val scope = rememberCoroutineScope()
-    var viewModel: ViewModel = viewModel()
+    var mainViewModel: MainViewModel = viewModel()
     var idText by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -47,7 +45,7 @@ fun crearUsuario(){
 
                     var user: User = User(0, name, email, null)
                         scope.launch {
-                            viewModel.addUser(user)
+                            mainViewModel.addUser(user)
                             infoText = "Usuario añadido"
                         }
                         idText = ""
@@ -81,7 +79,5 @@ fun TopBarCreateUser(){
         },
         backgroundColor = MaterialTheme.colors.primary,
         modifier = Modifier.height(60.dp))
-
-
 
 }

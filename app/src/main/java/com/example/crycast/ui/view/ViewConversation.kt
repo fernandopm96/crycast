@@ -23,23 +23,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.crycast.R
 import com.example.crycast.model.PrivateMessage
 import com.example.crycast.model.User
-import com.example.crycast.model.UserWithMessages
 import com.example.crycast.ui.Screen
-import com.example.crycast.ui.theme.GrayMessages
-import com.example.crycast.viewmodel.ViewModel
+import com.example.crycast.ui.theme.*
+import com.example.crycast.viewmodel.ThemeViewModel
+import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
-lateinit var destinationUser: User
-// Barra superior
+var currentUser: User = User(0, "fernando@mail.com", "Fernando", null)
+var destinationUser: User= User(0, "fernando@mail.com", "Fernando", null)
+
+fun setDestination(user: User){
+    destinationUser= user
+}
+
 @Composable
 fun TopBarConversation(){
-    val viewModel: ViewModel = viewModel()
-
-    TopAppBar(
+      TopAppBar(
 
         title = {
             Column(
@@ -92,7 +94,7 @@ fun TopBarConversation(){
 fun CustomTextField(){
 
     var value by remember { mutableStateOf("") }
-    val viewModel: ViewModel = viewModel()
+    val mainViewModel: MainViewModel = viewModel()
     val scope = rememberCoroutineScope()
 
     TextField(
@@ -116,12 +118,12 @@ fun CustomTextField(){
 
                             var msg = PrivateMessage(
                                 0,
-                                viewModel.currentUser!!.id,
+                                currentUser.id,
                                 value,
                                 destinationUser.id
                             )
                             scope.launch {
-                                viewModel.addMessage(msg)
+                                mainViewModel.addMessage(msg)
                                 Log.i("Mensaje registrado", value)
                             }
                             value = ""
@@ -134,8 +136,8 @@ fun CustomTextField(){
 
 @Composable
 fun ViewConversation(){
-    val viewModel: ViewModel = viewModel()
-    val messages by viewModel.messagesConversation.observeAsState()
+    val mainViewModel: MainViewModel = viewModel()
+    val messages by mainViewModel.messagesConversation.observeAsState()
 
     Scaffold(
         topBar = { TopBarConversation() },
@@ -148,7 +150,11 @@ fun ViewConversation(){
         ) {
             messages?.let{
                 items(messages!!) {
-                    MessageBox(it.text)
+                    if(it.idUser != destinationUser.id)
+                        MessageBox(it.text)
+                    else
+                        OtherMessageBox(msg = it.text)
+                        
                 }
             }
         }
@@ -159,35 +165,85 @@ fun ViewConversation(){
 // Formato de mensaje
 @Composable
 fun MessageBox(msg: String){
+    var themeViewModel: ThemeViewModel = viewModel()
 
+    val theme = themeViewModel.dataStoreTheme.collectAsState("").value
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
         Box(
             modifier = Modifier
+                .align(Alignment.End)
+                .widthIn(100.dp, 300.dp)
+                .padding(5.dp)
+                .background(color = if(theme.equals("LIGHT")) PrimaryLight else PrimaryDarkVariant, shape = RoundedCornerShape(10.dp)),
+        ) {
+
+            Text(
+                text = msg,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .absolutePadding(15.dp, 5.dp, 20.dp, 5.dp)
+                    .align(Alignment.TopStart)
+            )
+            Text(
+                text = "10:35",
+                color = Color.White,
+                fontWeight = FontWeight.Normal,
+                fontSize = 10.sp,
+                modifier = Modifier
+                    .absolutePadding(30.dp, 30.dp, 10.dp, 5.dp)
+                    .align(Alignment.BottomEnd)
+            )
+
+
+        }
+    }
+
+
+}
+@Composable
+fun OtherMessageBox(msg: String){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.Start)
                 .widthIn(100.dp, 300.dp)
                 .padding(5.dp)
                 .background(color = GrayMessages, shape = RoundedCornerShape(10.dp)),
         ) {
 
-                Text(
-                    text = msg,
-                    color = Color.Black,
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 16.sp,
-                    modifier = Modifier
-                        .absolutePadding(15.dp, 5.dp, 20.dp, 5.dp)
-                        .align(Alignment.TopStart)
-                )
-                Text(
-                    text = "10:35",
-                    color = Color.Black,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 10.sp,
-                    modifier = Modifier
-                        .absolutePadding(30.dp, 30.dp, 10.dp, 5.dp)
-                        .align(Alignment.BottomEnd)
-                )
+            Text(
+                text = msg,
+                color = Color.Black,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .absolutePadding(15.dp, 5.dp, 20.dp, 5.dp)
+                    .align(Alignment.TopStart)
+            )
+            Text(
+                text = "10:35",
+                color = Color.Black,
+                fontWeight = FontWeight.Normal,
+                fontSize = 10.sp,
+                modifier = Modifier
+                    .absolutePadding(30.dp, 30.dp, 10.dp, 5.dp)
+                    .align(Alignment.BottomEnd)
+            )
 
 
         }
+    }
+
+
 }
 
 

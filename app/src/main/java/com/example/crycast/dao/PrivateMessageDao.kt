@@ -12,7 +12,9 @@ import com.example.crycast.model.PrivateMessage
 interface PrivateMessageDao {
 
     @Transaction
-    @Query("SELECT * FROM PrivateMessage WHERE idUser = :idUser AND idDestinationUser = :idDestinationUser")
+    @Query("SELECT * FROM PrivateMessage" +
+            " WHERE idUser = :idUser AND idDestinationUser = :idDestinationUser " +
+            "OR idUser = :idDestinationUser AND idDestinationUser = :idUser")
     fun conversationMessages(idUser: Int, idDestinationUser: Int): LiveData<List<PrivateMessage>>
 
     @Insert

@@ -8,7 +8,14 @@ import com.example.crycast.model.UserWithMessages
 
 class UserRepository(private val userDao: UserDao) {
 
-    val getAllUsers: LiveData<List<UserWithMessages>> = userDao.getAllUsers()
+ //   val getAllUsers: LiveData<List<UserWithMessages>> = userDao.getAllUsers()
+
+    fun anyUser(): Boolean{
+        if(userDao.getAllUsers().isEmpty()){
+            return false
+        }
+        return true
+    }
 
     fun getUserById(id: Int): UserWithMessages? {
         return userDao.getUserById(id)
