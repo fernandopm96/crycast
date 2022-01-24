@@ -33,6 +33,9 @@ fun chooseUser(){
 
         ) {
             if(mainViewModel.anyUser()) {
+
+                //Prueba
+                    mainViewModel.currentTime()
                 users?.let{
                     users!!.forEach {
                         Row(

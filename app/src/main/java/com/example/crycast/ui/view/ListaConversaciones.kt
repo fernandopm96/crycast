@@ -30,7 +30,6 @@ fun Conversaciones(){
 
     Column(modifier = Modifier.fillMaxHeight()){
 
-
         users?.let { usersList ->
 
             usersList.forEach{

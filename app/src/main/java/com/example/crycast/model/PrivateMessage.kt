@@ -9,5 +9,6 @@ data class PrivateMessage (
     @PrimaryKey(autoGenerate = true) val id: Int,
     val idUser: Int,
     val text: String,
-    val idDestinationUser: Int
+    val idDestinationUser: Int,
+    val createDate: String
 )

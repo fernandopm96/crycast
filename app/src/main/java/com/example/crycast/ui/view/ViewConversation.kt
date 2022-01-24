@@ -31,6 +31,8 @@ import com.example.crycast.ui.theme.*
 import com.example.crycast.viewmodel.ThemeViewModel
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 var currentUser: User = User(0, "fernando@mail.com", "Fernando", null)
 var destinationUser: User= User(0, "fernando@mail.com", "Fernando", null)
@@ -115,12 +117,15 @@ fun CustomTextField(){
                     .absolutePadding(0.dp, 0.dp, 20.dp, 0.dp)
                     .clickable {
                         if (value != "") {
+                            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                            val currentDate = sdf.format(Date())
 
                             var msg = PrivateMessage(
                                 0,
                                 currentUser.id,
                                 value,
-                                destinationUser.id
+                                destinationUser.id,
+                                currentDate
                             )
                             scope.launch {
                                 mainViewModel.addMessage(msg)
@@ -136,35 +141,51 @@ fun CustomTextField(){
 
 @Composable
 fun ViewConversation(){
+    var themeViewModel: ThemeViewModel = viewModel()
+
+    val theme = themeViewModel.dataStoreTheme.collectAsState("").value
+
     val mainViewModel: MainViewModel = viewModel()
     val messages by mainViewModel.messagesConversation.observeAsState()
 
     Scaffold(
         topBar = { TopBarConversation() },
-        bottomBar = { CustomTextField() },
     ){
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            state = rememberLazyListState(),
-            horizontalAlignment = Alignment.End
-        ) {
-            messages?.let{
-                items(messages!!) {
-                    if(it.idUser != destinationUser.id)
-                        MessageBox(it.text)
-                    else
-                        OtherMessageBox(msg = it.text)
-                        
+        Column(modifier = Modifier.fillMaxSize().background(
+            color = if (theme.equals("LIGHT")) Background else SecondaryLight)
+        ){
+            Column(modifier = Modifier.weight(0.8f)) {
+                LazyColumn(
+                    reverseLayout = true,
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    state = rememberLazyListState(),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Top
+                ) {
+                    messages?.let{
+                        items(messages!!.reversed()) {
+                            if(it.idUser != destinationUser.id)
+                                MessageBox(it)
+                            else
+                                OtherMessageBox(msg = it)
+
+                        }
+                    }
                 }
             }
-        }
+                CustomTextField()
+            }
+
+
     }
+
 }
 
 
 // Formato de mensaje
 @Composable
-fun MessageBox(msg: String){
+fun MessageBox(msg: PrivateMessage){
     var themeViewModel: ThemeViewModel = viewModel()
 
     val theme = themeViewModel.dataStoreTheme.collectAsState("").value
@@ -178,11 +199,17 @@ fun MessageBox(msg: String){
                 .align(Alignment.End)
                 .widthIn(100.dp, 300.dp)
                 .padding(5.dp)
-                .background(color = if(theme.equals("LIGHT")) PrimaryLight else PrimaryDarkVariant, shape = RoundedCornerShape(10.dp)),
+                .background(
+                    color = if (theme.equals("LIGHT")) PrimaryLight else PrimaryDarkVariant,
+                    shape = RoundedCornerShape(10.dp)
+                ),
         ) {
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val sdf2 = SimpleDateFormat("hh:mm")
+            val msgDate = Date(sdf.parse(msg.createDate).getTime())
 
             Text(
-                text = msg,
+                text = msg.text,
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
@@ -191,7 +218,7 @@ fun MessageBox(msg: String){
                     .align(Alignment.TopStart)
             )
             Text(
-                text = "10:35",
+                text = sdf2.format(msgDate),
                 color = Color.White,
                 fontWeight = FontWeight.Normal,
                 fontSize = 10.sp,
@@ -207,7 +234,7 @@ fun MessageBox(msg: String){
 
 }
 @Composable
-fun OtherMessageBox(msg: String){
+fun OtherMessageBox(msg: PrivateMessage){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -219,9 +246,11 @@ fun OtherMessageBox(msg: String){
                 .padding(5.dp)
                 .background(color = GrayMessages, shape = RoundedCornerShape(10.dp)),
         ) {
-
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val sdf2 = SimpleDateFormat("hh:mm")
+            val msgDate = Date(sdf.parse(msg.createDate).getTime())
             Text(
-                text = msg,
+                text = msg.text,
                 color = Color.Black,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
@@ -230,7 +259,7 @@ fun OtherMessageBox(msg: String){
                     .align(Alignment.TopStart)
             )
             Text(
-                text = "10:35",
+                text = sdf2.format(msgDate),
                 color = Color.Black,
                 fontWeight = FontWeight.Normal,
                 fontSize = 10.sp,

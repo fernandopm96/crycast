@@ -1,6 +1,7 @@
 package com.example.crycast.viewmodel
 
 import android.app.Application
+import android.text.format.DateUtils
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -13,6 +14,8 @@ import com.example.crycast.repository.PrivateMessageRepository
 import com.example.crycast.repository.UserRepository
 import com.example.crycast.ui.view.currentUser
 import com.example.crycast.ui.view.destinationUser
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainViewModel (application: Application) : AndroidViewModel(application){
 
@@ -40,6 +43,13 @@ class MainViewModel (application: Application) : AndroidViewModel(application){
 
     fun anyUser(): Boolean{
         return userRepository.anyUser()
+    }
+
+    fun currentTime(){
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
+        Log.i("Fecha", currentDate)
+
     }
 
 

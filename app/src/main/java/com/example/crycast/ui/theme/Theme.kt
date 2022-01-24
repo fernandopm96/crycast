@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
         primary = PrimaryDark,
+    primaryVariant = PrimaryLightVariant,
         onPrimary = Color.White,
         secondary = PrimaryLight,
     onSecondary = Color.White,
@@ -30,8 +31,8 @@ private val LightColorPalette = lightColors(
         secondary = Teal200,
         onSecondary = Color.Black,
         background = Color.White,
-    onBackground = Color.Black,
-        surface = PrimaryLightVariant,
+    surface =PrimaryLightVariant,
+    //    surface = ,
 )
         /* Other default colors to override
     background = Color.White,
