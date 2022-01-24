@@ -129,6 +129,7 @@ fun CustomTextField(){
                             )
                             scope.launch {
                                 mainViewModel.addMessage(msg)
+                                mainViewModel.conectaSocket(msg.text)
                                 Log.i("Mensaje registrado", value)
                             }
                             value = ""

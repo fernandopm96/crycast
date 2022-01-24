@@ -39,7 +39,7 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
+        kotlinCompilerVersion '1.5.31'
     }
     packagingOptions {
         resources {
@@ -79,5 +79,9 @@ dependencies {
     kapt("androidx.room:room-compiler:2.4.1")
     // Room con corrutinas
     implementation("androidx.room:room-ktx:2.4.1")
+    // Websocket y Stomp
+    implementation("org.hildan.krossbow:krossbow-stomp-core:3.1.1")
+    implementation("org.hildan.krossbow:krossbow-websocket-okhttp:3.1.1")
+
 
 }

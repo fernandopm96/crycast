@@ -14,7 +14,14 @@ import com.example.crycast.repository.PrivateMessageRepository
 import com.example.crycast.repository.UserRepository
 import com.example.crycast.ui.view.currentUser
 import com.example.crycast.ui.view.destinationUser
+import okhttp3.OkHttpClient
+import org.hildan.krossbow.stomp.config.StompConfig
+import org.hildan.krossbow.stomp.sendText
+import org.hildan.krossbow.stomp.stomp
+import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
+import java.lang.Exception
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 
 class MainViewModel (application: Application) : AndroidViewModel(application){
@@ -51,6 +58,27 @@ class MainViewModel (application: Application) : AndroidViewModel(application){
         Log.i("Fecha", currentDate)
 
     }
+    //Recordar: Cambiar la version de kotlin, habilitar aaceso a red y parámetro de cleartext, importar subdependencias, uso de okHttpClient. No acepta conexiones a localhost!!!
+    suspend fun conectaSocket(msg: String){
+        Log.i("stomp","Corutina iniciada")
+        try {
+            val okHttpClient = OkHttpClient.Builder()
+                .callTimeout(Duration.ofMinutes(1))
+                .pingInterval(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(10))
+                .build()
 
+            val test = OkHttpWebSocketClient(okHttpClient)
+            val connection = test.connect("ws://crycast.herokuapp.com/chat")
+            val config = StompConfig()
+            val stomp = connection.stomp(config)
+
+            stomp.sendText("/app/test",msg)
+
+        }
+        catch (e: Exception){e.printStackTrace()}
+
+        Log.i("stomp","mensaje enviado")
+    }
 
 }
