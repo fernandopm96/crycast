@@ -33,6 +33,7 @@ import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.gson.Gson
 
 var currentUser: User = User(0, "fernando@mail.com", "Fernando", null)
 var destinationUser: User= User(0, "fernando@mail.com", "Fernando", null)
@@ -127,9 +128,12 @@ fun CustomTextField(){
                                 destinationUser.id,
                                 currentDate
                             )
+                            // JSON
+                            var jsonMsg = Gson().toJson(msg)
+                            Log.i("JSON", jsonMsg)
                             scope.launch {
                                 mainViewModel.addMessage(msg)
-                                mainViewModel.conectaSocket(msg.text)
+                                //mainViewModel.conectaSocket(msg.text)
                                 Log.i("Mensaje registrado", value)
                             }
                             value = ""

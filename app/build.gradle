@@ -82,6 +82,7 @@ dependencies {
     // Websocket y Stomp
     implementation("org.hildan.krossbow:krossbow-stomp-core:3.1.1")
     implementation("org.hildan.krossbow:krossbow-websocket-okhttp:3.1.1")
-
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
 
 }
