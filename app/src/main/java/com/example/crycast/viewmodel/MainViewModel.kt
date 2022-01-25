@@ -73,7 +73,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application){
             val config = StompConfig()
             val stomp = connection.stomp(config)
 
-            stomp.sendText("/app/test",msg)
+            stomp.sendText("/app/privatemessage",msg)
 
         }
         catch (e: Exception){e.printStackTrace()}
