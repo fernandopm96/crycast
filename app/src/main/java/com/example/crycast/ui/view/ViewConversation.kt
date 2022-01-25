@@ -133,7 +133,7 @@ fun CustomTextField(){
                             Log.i("JSON", jsonMsg)
                             scope.launch {
                                 mainViewModel.addMessage(msg)
-                                //mainViewModel.conectaSocket(msg.text)
+                                mainViewModel.conectaSocket(jsonMsg)
                                 Log.i("Mensaje registrado", value)
                             }
                             value = ""
@@ -170,7 +170,7 @@ fun ViewConversation(){
                 ) {
                     messages?.let{
                         items(messages!!.reversed()) {
-                            if(it.idUser != destinationUser.id)
+                            if(it.crycastUserId != destinationUser.id)
                                 MessageBox(it)
                             else
                                 OtherMessageBox(msg = it)

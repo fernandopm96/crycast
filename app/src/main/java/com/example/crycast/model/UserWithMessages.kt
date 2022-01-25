@@ -8,7 +8,7 @@ data class UserWithMessages (
     @Embedded val user: User,
     @Relation(
         parentColumn = "id",
-        entityColumn = "idUser"
+        entityColumn = "crycastUserId"
     )
     val messages: List<PrivateMessage>?
     )

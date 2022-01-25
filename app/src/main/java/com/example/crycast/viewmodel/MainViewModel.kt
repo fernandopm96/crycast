@@ -69,7 +69,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application){
                 .build()
 
             val test = OkHttpWebSocketClient(okHttpClient)
-            val connection = test.connect("ws://crycast.herokuapp.com/chat")
+            val connection = test.connect("ws://boiling-hollows-83192.herokuapp.com/chat")
             val config = StompConfig()
             val stomp = connection.stomp(config)
 

@@ -13,8 +13,8 @@ interface PrivateMessageDao {
 
     @Transaction
     @Query("SELECT * FROM PrivateMessage" +
-            " WHERE idUser = :idUser AND idDestinationUser = :idDestinationUser " +
-            "OR idUser = :idDestinationUser AND idDestinationUser = :idUser")
+            " WHERE crycastUserId = :idUser AND crycastDestinationUserId = :idDestinationUser " +
+            "OR crycastUserId = :idDestinationUser AND crycastDestinationUserId = :idUser")
     fun conversationMessages(idUser: Int, idDestinationUser: Int): LiveData<List<PrivateMessage>>
 
     @Insert
