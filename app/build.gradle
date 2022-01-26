@@ -84,5 +84,9 @@ dependencies {
     implementation("org.hildan.krossbow:krossbow-websocket-okhttp:3.1.1")
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
+    // Más iconos
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    // HTTP
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
 
 }

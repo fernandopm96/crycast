@@ -12,8 +12,11 @@ fun SetupNav(navController: NavHostController){
     navHostController = navController
     NavHost(
         navController = navController,
-        startDestination = Screen.CurrentUser.route
+        startDestination = Screen.LoginScreen.route
     ){
+        composable(route = Screen.LoginScreen.route){
+            LoginScreen()
+        }
         composable(route = Screen.CurrentUser.route){
             chooseUser()
         }
