@@ -87,6 +87,12 @@ dependencies {
     // Más iconos
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     // HTTP
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    // Convertir a gson
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    // Interceptores HTTP
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 
 }

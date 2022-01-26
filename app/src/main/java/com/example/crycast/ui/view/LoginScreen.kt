@@ -37,6 +37,7 @@ import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.*
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
@@ -145,7 +146,7 @@ fun LoginScreen() {
                             ).show()
                             var credentials = Credentials(name.value.text, password.value.text)
                             scope.async {
-                                mainViewModel.post(credentials)
+                                mainViewModel.login(credentials)
                             }
                             navHostController.navigate(Screen.Splash.route);
                         }
