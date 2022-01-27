@@ -28,7 +28,7 @@ import com.example.crycast.model.PrivateMessage
 import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.*
-import com.example.crycast.viewmodel.ThemeViewModel
+import com.example.crycast.viewmodel.DataStoreViewModel
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -146,9 +146,9 @@ fun CustomTextField(){
 
 @Composable
 fun ViewConversation(){
-    var themeViewModel: ThemeViewModel = viewModel()
+    var dataStoreViewModel: DataStoreViewModel = viewModel()
 
-    val theme = themeViewModel.dataStoreTheme.collectAsState("").value
+    val theme = dataStoreViewModel.dataStoreTheme.collectAsState("").value
 
     val mainViewModel: MainViewModel = viewModel()
     val messages by mainViewModel.messagesConversation.observeAsState()
@@ -191,9 +191,9 @@ fun ViewConversation(){
 // Formato de mensaje
 @Composable
 fun MessageBox(msg: PrivateMessage){
-    var themeViewModel: ThemeViewModel = viewModel()
+    var dataStoreViewModel: DataStoreViewModel = viewModel()
 
-    val theme = themeViewModel.dataStoreTheme.collectAsState("").value
+    val theme = dataStoreViewModel.dataStoreTheme.collectAsState("").value
 
     Column(
         modifier = Modifier

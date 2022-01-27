@@ -1,18 +1,28 @@
 package com.example.crycast.ui.view
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.crycast.ui.Screen
+import com.example.crycast.viewmodel.DataStoreViewModel
 
 lateinit var navHostController: NavHostController
 @Composable
 fun SetupNav(navController: NavHostController){
+    var dataStoreViewModel: DataStoreViewModel = viewModel()
+    val idUser = dataStoreViewModel.dataStoreUser.collectAsState("").value
     navHostController = navController
     NavHost(
         navController = navController,
-        startDestination = Screen.LoginScreen.route
+        startDestination = if(idUser == "0"){
+            Screen.LoginScreen.route
+        } else {
+            Screen.Splash.route
+        }
+
     ){
         composable(route = Screen.LoginScreen.route){
             LoginScreen()

@@ -118,7 +118,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         CoroutineScope(Dispatchers.IO).launch {
             var response = apiService.login(credentials)
             if(response.isSuccessful){
-                Log.i("ok", response.body()!!.name + "\n" + response.body()!!.password)
+                Log.i("ok", response.body()!!.name)
             } else {
                 Log.i("ok", "ERROR EN EL POST")
             }

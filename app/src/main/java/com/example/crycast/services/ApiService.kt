@@ -43,6 +43,6 @@ interface ApiService {
     suspend fun getUsers(): Response<List<User>>
 
     @POST("/login")
-    suspend fun login(@Body credentials: Credentials): Response<Credentials>
+    suspend fun login(@Body credentials: Credentials): Response<User>
 
 }

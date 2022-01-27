@@ -2,6 +2,7 @@ package com.example.crycast.ui.view
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
@@ -25,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
 import com.example.crycast.ui.Screen
-import com.example.crycast.viewmodel.ThemeViewModel
+import com.example.crycast.viewmodel.DataStoreViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -94,8 +96,11 @@ fun DesplegableOpciones(
     scope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
-    val themeViewModel: ThemeViewModel = viewModel()
+    val dataStoreViewModel: DataStoreViewModel = viewModel()
     var userProfile = remember{ mutableStateOf(currentUser) }
+    val context = LocalContext.current
+    val logout = remember { mutableStateOf(false) }
+
     Column (
         modifier = Modifier.height(400.dp)
     ) {
@@ -118,7 +123,7 @@ fun DesplegableOpciones(
             IconButton(modifier = Modifier.absolutePadding(0.dp, 10.dp, 10.dp, 0.dp),
                 onClick = {
                     scope.launch {
-                        themeViewModel.themeChange()
+                        dataStoreViewModel.themeChange()
                         Log.i("BOTON", "CAMBIA TEMA")
                     }
                 }) {
@@ -170,6 +175,25 @@ fun DesplegableOpciones(
 
 
         Divider()
+
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .weight(0.4f)
+                .padding(20.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text("Cerrar sesión")
+            IconButton(onClick = {
+                scope.launch {
+                    dataStoreViewModel.savePrincipalUser("0")
+                }
+            }) {
+                Icon(imageVector = Icons.Filled.Logout, contentDescription = "Cerrar sesión")
+            }
+        }
+
 
     }
 }

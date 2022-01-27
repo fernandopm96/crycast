@@ -20,14 +20,31 @@ enum class Theme {
     LIGHT,
     DARK
 }
-class ThemeViewModel(application: Application) : AndroidViewModel(application){
+class DataStoreViewModel(application: Application) : AndroidViewModel(application){
 
     companion object{
-         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("darkMode")
-         val THEME = stringPreferencesKey("THEME")
+        private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("darkMode")
+        val THEME = stringPreferencesKey("THEME")
+        val USER = stringPreferencesKey("ID")
+    }
+    // ID del usuario principal
+    val dataStoreUser: Flow<String?> = application.applicationContext.dataStore.data
+        .map { preferences ->
+            preferences[USER] ?: "0"
+        }
+
+    suspend fun savePrincipalUser(idUser: String) {
+        Log.i("viewmodel", "estableciendo usuario...")
+        this.getApplication<Application>().applicationContext.dataStore.edit {
+                preferences ->
+            preferences[USER] = idUser
+        }
+        Log.i("usuario", "usuario establecido" + idUser)
     }
 
 
+
+    // TEMA ELEGIDO
     val dataStoreTheme: Flow<String?> = application.applicationContext.dataStore.data
         .map { preferences ->
         preferences[THEME] ?: "LIGHT"

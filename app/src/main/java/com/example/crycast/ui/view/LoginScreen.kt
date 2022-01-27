@@ -33,17 +33,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.Credentials
 import com.example.crycast.R
+import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.*
+import com.example.crycast.viewmodel.DataStoreViewModel
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
+val users: List<User> = listOf(
+    User(1,"fernando@mail.com", "Fernando", null),
+    User(2,"jose@mail.com", "Jose", null),
+    User(3,"ricardo@mail.com", "Jose", null),
+    User(4,"sandra@mail.com", "Jose", null)
+)
+
 @Composable
 fun LoginScreen() {
-
+    val dataStoreViewModel: DataStoreViewModel = viewModel()
     val mainViewModel: MainViewModel = viewModel()
 
     val scope = rememberCoroutineScope()
@@ -139,16 +148,35 @@ fun LoginScreen() {
                         else -> {
                             passwordErrorState.value = false
                             nameErrorState.value = false
-                            Toast.makeText(
-                                context,
-                                "Login correcto",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            var credentials = Credentials(name.value.text, password.value.text)
+
+                            var loginSuccesful: Boolean = false
+                            var userId: Int = 0
+                            users.forEach {
+                                if(it.name == name.value.text){
+                                    loginSuccesful = true
+                                    userId = it.id
+                                }
+                            }
+                            if(loginSuccesful){
+                                scope.launch {
+                                    dataStoreViewModel.savePrincipalUser(userId.toString())
+                                    Toast.makeText(
+                                        context,
+                                        "Login correcto",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navHostController.navigate(Screen.Splash.route);
+                                }
+
+                            } else {
+                                nameErrorState.value = true
+                            }
+                            //var credentials = Credentials(name.value.text, password.value.text)
+                            /*
                             scope.async {
                                 mainViewModel.login(credentials)
-                            }
-                            navHostController.navigate(Screen.Splash.route);
+                            }*/
+
                         }
                     }
 
@@ -164,13 +192,3 @@ fun LoginScreen() {
         }
     }
 }
-       // Spacer(Modifier.size(16.dp))
-    /*    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            TextButton(onClick = {
-
-            }) {
-                Text(text = "Registro", color = Color.Red)
-            }
-        }
-    }
-}*/

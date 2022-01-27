@@ -2,15 +2,13 @@ package com.example.crycast.ui.theme
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.graphics.Color
-import com.example.crycast.viewmodel.ThemeViewModel
+import com.example.crycast.viewmodel.DataStoreViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @SuppressLint("ConflictingOnColor")
@@ -48,9 +46,9 @@ fun CrycastTheme(
     content: @Composable() () -> Unit
 ) {
 
-    var themeViewModel: ThemeViewModel = viewModel()
+    var dataStoreViewModel: DataStoreViewModel = viewModel()
 
-    val theme = themeViewModel.dataStoreTheme.collectAsState("").value
+    val theme = dataStoreViewModel.dataStoreTheme.collectAsState("").value
     Log.i("THEME", theme.toString())
 
 
