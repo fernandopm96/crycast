@@ -14,11 +14,11 @@ interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM User u WHERE u.id != :id")
-    fun getUsers(id: Int): LiveData<List<User>>
+    fun getUsers(id: String): LiveData<List<User>>
 
     @Transaction
     @Query("SELECT * FROM User WHERE id = :id")
-    fun getUserById(id: Int) : UserWithMessages?
+    fun getUserById(id: String) : UserWithMessages?
     @Transaction
     @Query("SELECT * FROM User WHERE name = :name")
     fun getUserByName(name: String) : UserWithMessages?

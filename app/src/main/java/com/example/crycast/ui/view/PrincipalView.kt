@@ -187,7 +187,7 @@ fun DesplegableOpciones(
             Text("Cerrar sesión")
             IconButton(onClick = {
                 scope.launch {
-                    dataStoreViewModel.savePrincipalUser("0")
+
                 }
             }) {
                 Icon(imageVector = Icons.Filled.Logout, contentDescription = "Cerrar sesión")

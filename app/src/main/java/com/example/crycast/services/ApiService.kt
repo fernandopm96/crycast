@@ -1,11 +1,10 @@
 package com.example.crycast.services
 
-import com.example.crycast.Credentials
+import com.example.crycast.dto.Credentials
 import com.example.crycast.model.User
 import okhttp3.OkHttpClient
 import okhttp3.OkHttpClient.Builder
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,7 +28,7 @@ interface ApiService {
             if(apiService == null){
                 apiService = Retrofit
                     .Builder()
-                    .baseUrl("https://boiling-hollows-83192.herokuapp.com")
+                    .baseUrl("https://crycast.herokuapp.com")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build()

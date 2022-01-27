@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import java.time.Instant
+import java.util.*
 
 enum class Theme {
     LIGHT,
@@ -26,21 +28,11 @@ class DataStoreViewModel(application: Application) : AndroidViewModel(applicatio
         private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("darkMode")
         val THEME = stringPreferencesKey("THEME")
         val USER = stringPreferencesKey("ID")
+        val LAST_UPDATE = stringPreferencesKey("LAST_UPDATE")
     }
-    // ID del usuario principal
-    val dataStoreUser: Flow<String?> = application.applicationContext.dataStore.data
-        .map { preferences ->
-            preferences[USER] ?: "0"
-        }
 
-    suspend fun savePrincipalUser(idUser: String) {
-        Log.i("viewmodel", "estableciendo usuario...")
-        this.getApplication<Application>().applicationContext.dataStore.edit {
-                preferences ->
-            preferences[USER] = idUser
-        }
-        Log.i("usuario", "usuario establecido" + idUser)
-    }
+
+    // última modificación
 
 
 
@@ -58,8 +50,6 @@ class DataStoreViewModel(application: Application) : AndroidViewModel(applicatio
 
     }
 
-
-    //save email into datastore
     suspend fun saveTheme(theme: Theme) {
         Log.i("viewmodel suspend", "cambia tema")
         this.getApplication<Application>().applicationContext.dataStore.edit {

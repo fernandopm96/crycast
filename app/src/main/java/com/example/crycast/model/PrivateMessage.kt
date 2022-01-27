@@ -4,11 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class PrivateMessage (
+data class PrivateMessage(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val crycastUserId: Int,
+    val crycastUserId: String,
     val text: String,
-    val crycastDestinationUserId: Int,
+    val crycastDestinationUserId: String,
     val createDate: String
 )

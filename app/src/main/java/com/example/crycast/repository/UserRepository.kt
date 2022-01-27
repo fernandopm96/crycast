@@ -17,7 +17,7 @@ class UserRepository(private val userDao: UserDao) {
         return true
     }
 
-    fun getUserById(id: Int): UserWithMessages? {
+    fun getUserById(id: String): UserWithMessages? {
         return userDao.getUserById(id)
     }
     fun getUserByName(name: String): UserWithMessages? {

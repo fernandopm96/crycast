@@ -58,7 +58,7 @@ fun chooseUser(){
                 }
             } else {
 
-                var initialUser = User(0, "fernando@mail.com", "Fernando", null)
+                var initialUser = User("0", "fernando@mail.com", "Fernando", null)
                 currentUser = initialUser
                 user = initialUser
                 scope.launch {

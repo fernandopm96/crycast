@@ -13,15 +13,16 @@ lateinit var navHostController: NavHostController
 @Composable
 fun SetupNav(navController: NavHostController){
     var dataStoreViewModel: DataStoreViewModel = viewModel()
-    val idUser = dataStoreViewModel.dataStoreUser.collectAsState("").value
+ //   val idUser = dataStoreViewModel.dataStoreUser.collectAsState("").value
     navHostController = navController
     NavHost(
         navController = navController,
-        startDestination = if(idUser == "0"){
+        startDestination = Screen.Splash.route/*
+        if(idUser == "0"){
             Screen.LoginScreen.route
         } else {
-            Screen.Splash.route
-        }
+
+        }*/
 
     ){
         composable(route = Screen.LoginScreen.route){

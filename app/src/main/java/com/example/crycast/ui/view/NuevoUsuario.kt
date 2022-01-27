@@ -43,7 +43,7 @@ fun crearUsuario(){
             IconButton(onClick = {
                 if(!name.isEmpty() || !email.isEmpty()){
 
-                    var user: User = User(0, name, email, null)
+                    var user: User = User("0", name, email, null)
                         scope.launch {
                             mainViewModel.addUser(user)
                             infoText = "Usuario añadido"

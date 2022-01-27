@@ -1,7 +1,6 @@
 package com.example.crycast.ui.view
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,39 +14,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.crycast.Credentials
+import com.example.crycast.dto.Credentials
 import com.example.crycast.R
 import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.*
 import com.example.crycast.viewmodel.DataStoreViewModel
 import com.example.crycast.viewmodel.MainViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 val users: List<User> = listOf(
-    User(1,"fernando@mail.com", "Fernando", null),
-    User(2,"jose@mail.com", "Jose", null),
-    User(3,"ricardo@mail.com", "Jose", null),
-    User(4,"sandra@mail.com", "Jose", null)
+    User("1","fernando@mail.com", "Fernando", null),
+    User("2","jose@mail.com", "Jose", null),
+    User("3","ricardo@mail.com", "Jose", null),
+    User("4","sandra@mail.com", "Jose", null)
 )
 
 @Composable
@@ -58,8 +49,8 @@ fun LoginScreen() {
     val scope = rememberCoroutineScope()
 
     val context = LocalContext.current
-    val name = remember { mutableStateOf(TextFieldValue()) }
-    val nameErrorState = remember { mutableStateOf(false) }
+    val mail = remember { mutableStateOf(TextFieldValue()) }
+    val mailErrorState = remember { mutableStateOf(false) }
     val passwordErrorState = remember { mutableStateOf(false) }
     val password = remember { mutableStateOf(TextFieldValue()) }
     Column(
@@ -79,20 +70,20 @@ fun LoginScreen() {
 
         Spacer(Modifier.size(16.dp))
         OutlinedTextField(
-            value = name.value,
+            value = mail.value,
             onValueChange = {
-                if (nameErrorState.value) {
-                    nameErrorState.value = false
+                if (mailErrorState.value) {
+                    mailErrorState.value = false
                 }
-                name.value = it
+                mail.value = it
             },
-            isError = nameErrorState.value,
+            isError = mailErrorState.value,
             modifier = Modifier.fillMaxWidth(),
             label = {
-                Text(text = "Introduce el nombre*", color = Color.Black)
+                Text(text = "Introduce tu email*", color = Color.Black)
             },
         )
-        if (nameErrorState.value) {
+        if (mailErrorState.value) {
             Text(text = "Obligatorio", color = Color.Red)
         }
         Spacer(Modifier.size(16.dp))
@@ -139,27 +130,27 @@ fun LoginScreen() {
             Button(
                 onClick = {
                     when {
-                        name.value.text.isEmpty() -> {
-                            nameErrorState.value = true
+                        mail.value.text.isEmpty() -> {
+                            mailErrorState.value = true
                         }
                         password.value.text.isEmpty() -> {
                             passwordErrorState.value = true
                         }
                         else -> {
                             passwordErrorState.value = false
-                            nameErrorState.value = false
+                            mailErrorState.value = false
 
                             var loginSuccesful: Boolean = false
-                            var userId: Int = 0
+                            var userId: String = ""
                             users.forEach {
-                                if(it.name == name.value.text){
+                                if(it.name == mail.value.text){
                                     loginSuccesful = true
                                     userId = it.id
                                 }
                             }
                             if(loginSuccesful){
                                 scope.launch {
-                                    dataStoreViewModel.savePrincipalUser(userId.toString())
+                                    mainViewModel.setPrincipalUser(userId)
                                     Toast.makeText(
                                         context,
                                         "Login correcto",
@@ -169,13 +160,13 @@ fun LoginScreen() {
                                 }
 
                             } else {
-                                nameErrorState.value = true
+                                mailErrorState.value = true
                             }
-                            //var credentials = Credentials(name.value.text, password.value.text)
-                            /*
-                            scope.async {
+                            var credentials = Credentials(mail.value.text, password.value.text)
+
+                            scope.launch {
                                 mainViewModel.login(credentials)
-                            }*/
+                            }
 
                         }
                     }

@@ -1,14 +1,18 @@
 package com.example.crycast.viewmodel
 
 import android.app.Application
-import android.text.format.DateUtils
 import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.crycast.Credentials
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.crycast.MainActivity
+import com.example.crycast.dto.Credentials
 import com.example.crycast.dao.PrivateMessageDao
 import com.example.crycast.dao.UserDao
 import com.example.crycast.database.CryCastDatabase
+import com.example.crycast.model.DataStoreManager
 import com.example.crycast.model.PrivateMessage
 import com.example.crycast.model.User
 import com.example.crycast.repository.PrivateMessageRepository
@@ -16,22 +20,16 @@ import com.example.crycast.repository.UserRepository
 import com.example.crycast.services.ApiService
 import com.example.crycast.ui.view.currentUser
 import com.example.crycast.ui.view.destinationUser
-import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import okhttp3.Callback
-import okhttp3.FormBody
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.hildan.krossbow.stomp.config.StompConfig
 import org.hildan.krossbow.stomp.sendText
 import org.hildan.krossbow.stomp.stomp
 import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
-import retrofit2.Call
-import retrofit2.Response
 import java.lang.Exception
-import java.net.URL
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -56,6 +54,9 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
 
     // API
     val apiService: ApiService = ApiService.getInstance()
+
+
+    var dataStoreManager: DataStoreManager = DataStoreManager(this.getApplication())
 
     suspend fun addMessage(msg: PrivateMessage) {
         messageRepository.addMessage(msg)
@@ -114,7 +115,9 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         }
 
     }
+
     fun login(credentials: Credentials){
+
         CoroutineScope(Dispatchers.IO).launch {
             var response = apiService.login(credentials)
             if(response.isSuccessful){
@@ -123,6 +126,14 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
                 Log.i("ok", "ERROR EN EL POST")
             }
         }
+    }
+
+    suspend fun setPrincipalUser(userId: String){
+        dataStoreManager.savePrincipalUser(userId)
+    }
+
+    suspend fun updateDataUser(lastUpdate: String){
+        dataStoreManager.setLastUpdate(lastUpdate)
     }
 
 }
