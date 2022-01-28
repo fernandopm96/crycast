@@ -115,7 +115,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     }
 
     suspend fun update(){
-        var users = usersApiService.getUsers()
+        var users = crycastApiService.getUsersPrueba()
         if(users.isSuccessful){
             userDao.insertMany(users.body()!!)
         }
@@ -126,10 +126,11 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         CoroutineScope(Dispatchers.IO).launch {
             var response = usersApiService.login(credentials)
             if(response.isSuccessful){
-                dataStore.savePrincipalUserName(response.body()!!.id)
-                dataStore.savePrincipalUserName(response.body()!!.mail)
+                dataStore.savePrincipalUserId(response.body()!!.id)
+                dataStore.savePrincipalUserMail(response.body()!!.mail)
                 dataStore.savePrincipalUserName(response.body()!!.name)
                 currentUser = response.body()!!
+                update()
                 Log.i("ok", response.body()!!.name)
             } else {
                 Log.i("ok", "ERROR EN EL POST")

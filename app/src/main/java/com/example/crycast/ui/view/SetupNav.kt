@@ -40,10 +40,6 @@ fun SetupNav(navController: NavHostController){
         }
 
     ){
-        // Actualizar usuarios
-        scope.launch {
-            mainViewModel.update()
-        }
 
         composable(route = Screen.LoginScreen.route){
             LoginScreen()

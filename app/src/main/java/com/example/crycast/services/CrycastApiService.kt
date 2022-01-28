@@ -37,6 +37,9 @@ interface CrycastApiService {
 
     @GET("/users")
     suspend fun getUsers(): Response<List<User>>
+    @GET("/usersprueba")
+    suspend fun getUsersPrueba(): Response<List<User>>
+
 
     @POST("/auth/login")
     suspend fun login(@Body credentials: Credentials): Response<User>

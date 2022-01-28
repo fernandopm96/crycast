@@ -23,10 +23,10 @@ interface UserDao {
     @Query("SELECT * FROM User WHERE name = :name")
     fun getUserByName(name: String) : UserWithMessages?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMany(users : List<User>)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(user: User)
 
     @Update

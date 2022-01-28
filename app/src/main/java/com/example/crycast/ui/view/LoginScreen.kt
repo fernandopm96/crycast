@@ -135,33 +135,15 @@ fun LoginScreen() {
                             passwordErrorState.value = false
                             mailErrorState.value = false
 
-                            var loginSuccesful: Boolean = false
-                            var userId: String = ""
-                            users.forEach {
-                                if(it.name == mail.value.text){
-                                    loginSuccesful = true
-                                    userId = it.id
-                                }
-                            }
-                            if(loginSuccesful){
+                            if(!mailErrorState.value && !passwordErrorState.value){
+                                var credentials = Credentials(mail.value.text, password.value.text)
+
                                 scope.launch {
-                                    mainViewModel.setPrincipalUser(userId)
-                                    Toast.makeText(
-                                        context,
-                                        "Login correcto",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    navHostController.navigate(Screen.Splash.route);
+                                    mainViewModel.login(credentials)
+
                                 }
-
-                            } else {
-                                mailErrorState.value = true
                             }
-                            var credentials = Credentials(mail.value.text, password.value.text)
 
-                            scope.launch {
-                                mainViewModel.login(credentials)
-                            }
 
                         }
                     }
