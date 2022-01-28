@@ -8,10 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +26,6 @@ import com.example.crycast.R
 import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.*
-import com.example.crycast.viewmodel.DataStoreViewModel
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
@@ -37,17 +33,16 @@ import kotlinx.coroutines.launch
 val users: List<User> = listOf(
     User("1","fernando@mail.com", "Fernando", null),
     User("2","jose@mail.com", "Jose", null),
-    User("3","ricardo@mail.com", "Jose", null),
-    User("4","sandra@mail.com", "Jose", null)
+    User("3","ricardo@mail.com", "Sandra", null),
+    User("4","sandra@mail.com", "Ricardo", null)
 )
+
 
 @Composable
 fun LoginScreen() {
-    val dataStoreViewModel: DataStoreViewModel = viewModel()
     val mainViewModel: MainViewModel = viewModel()
-
     val scope = rememberCoroutineScope()
-
+    var idUser = dataStore.dataStoreUserId.collectAsState(initial = "").value
     val context = LocalContext.current
     val mail = remember { mutableStateOf(TextFieldValue()) }
     val mailErrorState = remember { mutableStateOf(false) }

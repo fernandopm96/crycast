@@ -13,10 +13,10 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 
-interface ApiService {
+interface UsersApiService {
 
     companion object {
-        var apiService: ApiService? = null
+        var usersApiService: UsersApiService? = null
         var interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -24,24 +24,24 @@ interface ApiService {
             addInterceptor(interceptor)
         }.build()
 
-        fun getInstance(): ApiService{
-            if(apiService == null){
-                apiService = Retrofit
+        fun getInstance(): UsersApiService{
+            if(usersApiService == null){
+                usersApiService = Retrofit
                     .Builder()
-                    .baseUrl("https://crycast.herokuapp.com")
+                    .baseUrl("https://crysec-users.herokuapp.com")
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(client)
                     .build()
-                    .create(ApiService::class.java)
+                    .create(UsersApiService::class.java)
             }
-            return apiService!!
+            return usersApiService!!
         }
     }
 
     @GET("/users")
     suspend fun getUsers(): Response<List<User>>
 
-    @POST("/login")
+    @POST("/auth/login")
     suspend fun login(@Body credentials: Credentials): Response<User>
 
 }

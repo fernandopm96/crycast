@@ -35,8 +35,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.gson.Gson
 
-var currentUser: User = User("0", "fernando@mail.com", "Fernando", null)
-var destinationUser: User= User("0", "fernando@mail.com", "Fernando", null)
 
 fun setDestination(user: User){
     destinationUser= user

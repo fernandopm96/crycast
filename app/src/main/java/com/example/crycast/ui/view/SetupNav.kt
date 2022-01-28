@@ -2,29 +2,49 @@ package com.example.crycast.ui.view
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.crycast.model.DataStoreManager
 import com.example.crycast.ui.Screen
 import com.example.crycast.viewmodel.DataStoreViewModel
+import com.example.crycast.viewmodel.MainViewModel
+import kotlinx.coroutines.launch
 
+lateinit var dataStore: DataStoreManager
 lateinit var navHostController: NavHostController
 @Composable
 fun SetupNav(navController: NavHostController){
     var dataStoreViewModel: DataStoreViewModel = viewModel()
- //   val idUser = dataStoreViewModel.dataStoreUser.collectAsState("").value
+    var mainViewModel: MainViewModel = viewModel()
+    var scope = rememberCoroutineScope()
+
+    var idUser = dataStore.dataStoreUserId.collectAsState(initial = "").value
+    var mail = dataStore.dataStoreUserMail.collectAsState(initial = "").value
+    var name = dataStore.dataStoreUserName.collectAsState(initial = "").value
+
+    currentUser.id = idUser!!
+    currentUser.mail = mail!!
+    currentUser.name = name!!
+
     navHostController = navController
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route/*
+        startDestination =
         if(idUser == "0"){
             Screen.LoginScreen.route
         } else {
-
-        }*/
+            Screen.Splash.route
+        }
 
     ){
+        // Actualizar usuarios
+        scope.launch {
+            mainViewModel.update()
+        }
+
         composable(route = Screen.LoginScreen.route){
             LoginScreen()
         }

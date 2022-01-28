@@ -1,16 +1,36 @@
 package com.example.crycast
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import androidx.annotation.Nullable
+import androidx.compose.runtime.collectAsState
 import com.example.crycast.database.CryCastDatabase
-import com.example.crycast.model.User
+import com.example.crycast.repository.UserRepository
+import com.example.crycast.services.UsersApiService
+import com.example.crycast.ui.view.currentUser
+import com.example.crycast.ui.view.dataStore
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.first
+import okhttp3.Dispatcher
+import java.util.concurrent.Flow
 
 class WebsocketService : Service() {
 
-    private val db: CryCastDatabase = CryCastDatabase.getInstance(application)
+    lateinit var context: Context
+    lateinit var db: CryCastDatabase
+    lateinit var apiService: UsersApiService
+
+    lateinit var idUser: String
+
+    override fun onCreate() {
+        super.onCreate()
+        context = this
+        db = CryCastDatabase.getInstance(context)
+        apiService = UsersApiService.getInstance()
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
@@ -27,11 +47,8 @@ class WebsocketService : Service() {
 
         return super.onStartCommand(intent, flags, startId)
     }
-    suspend fun insertUser(){
-        var user: User = User("0", "prueba", "prueba", null)
-        db.userDao().insert(user)
 
-    }
+
 
     @Nullable
     override fun onBind(p0: Intent?): IBinder? {

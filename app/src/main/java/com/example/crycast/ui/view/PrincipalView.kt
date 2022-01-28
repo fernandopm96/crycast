@@ -26,10 +26,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
+import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.viewmodel.DataStoreViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+var currentUser: User = User("0", "fernando@mail.com", "Fernando", null)
+var destinationUser: User = User("0", "fernando@mail.com", "Fernando", null)
 
 @Composable
 fun GetMainScaffold(){

@@ -23,6 +23,8 @@ interface UserDao {
     @Query("SELECT * FROM User WHERE name = :name")
     fun getUserByName(name: String) : UserWithMessages?
 
+    @Insert
+    fun insertMany(users : List<User>)
 
     @Insert
     suspend fun insert(user: User)
