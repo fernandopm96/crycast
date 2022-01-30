@@ -20,6 +20,7 @@ import com.example.crycast.ui.view.dataStore
 import com.example.crycast.ui.view.destinationUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import org.hildan.krossbow.stomp.config.StompConfig
@@ -115,7 +116,8 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     }
 
     suspend fun update(){
-        var users = crycastApiService.getUsersPrueba()
+
+        var users = crycastApiService.getUsersPrueba(dataStore.dataStoreLastUpdate.first()!!)
         if(users.isSuccessful){
             userDao.insertMany(users.body()!!)
         }
