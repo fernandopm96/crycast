@@ -10,7 +10,9 @@ import com.example.crycast.model.UserWithMessages
 interface UserDao {
 
     @Query("SELECT * FROM User")
-    fun getAllUsers(): List<User>
+    fun getAllUsers(): LiveData<List<User>>
+    @Query("SELECT * FROM User")
+    fun anyUsers(): List<User>
 
     @Transaction
     @Query("SELECT * FROM User u WHERE u.id != :id")

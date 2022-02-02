@@ -9,7 +9,7 @@ import com.example.crycast.model.UserWithMessages
 class UserRepository(private val userDao: UserDao) {
 
    fun anyUser(): Boolean{
-        if(userDao.getAllUsers().isEmpty()){
+        if(userDao.anyUsers().isEmpty()){
             return false
         }
         return true

@@ -10,11 +10,6 @@ import androidx.compose.runtime.collectAsState
 import com.example.crycast.database.CryCastDatabase
 import com.example.crycast.repository.UserRepository
 import com.example.crycast.services.UsersApiService
-import com.example.crycast.ui.view.currentUser
-import com.example.crycast.ui.view.dataStore
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.flow.first
-import okhttp3.Dispatcher
 import java.util.concurrent.Flow
 
 class WebsocketService : Service() {

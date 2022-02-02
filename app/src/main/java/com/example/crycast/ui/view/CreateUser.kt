@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun crearUsuario(){
+fun createUser(){
     val scope = rememberCoroutineScope()
     var mainViewModel: MainViewModel = viewModel()
     var idText by remember { mutableStateOf("") }
@@ -32,9 +32,11 @@ fun crearUsuario(){
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
             ) {
+            Text("Introduce el nombre de usuario")
             TextField(value = name, onValueChange = {
                 name = it
             }, modifier = Modifier.fillMaxWidth())
+            Text("Introduce el email del usuario")
             TextField(value = email, onValueChange = {
                 email = it
             }, modifier = Modifier.fillMaxWidth())

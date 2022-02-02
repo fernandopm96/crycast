@@ -8,14 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.filled.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,6 +64,7 @@ fun MenuSuperiorPrincipal(
     scope: CoroutineScope,
     scaffoldState: ScaffoldState
 ){
+    var showMenu by remember{ mutableStateOf(false)}
     TopAppBar(
         title = { Text(text = "CryCast")},
         navigationIcon = {
@@ -84,9 +79,21 @@ fun MenuSuperiorPrincipal(
         backgroundColor = MaterialTheme.colors.primary,
         actions = {
             IconButton(onClick = {
-                navHostController.navigate(Screen.CreateUser.route)
+                showMenu = !showMenu
             }) {
-                Icon(imageVector = Icons.Filled.Search, contentDescription = "Search Icon")
+                Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "Options")
+            }
+            DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                DropdownMenuItem(onClick = {
+                    navHostController.navigate(Screen.CreateUser.route)
+                }) {
+                    Text("Nuevo usuario")
+                }
+                DropdownMenuItem(onClick = {
+                    navHostController.navigate(Screen.CreateGroup.route)
+                }) {
+                    Text("Nuevo grupo")
+                }
             }
         }
     )

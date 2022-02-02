@@ -16,7 +16,6 @@ import com.example.crycast.model.DataStoreManager
 import com.example.crycast.repository.UserRepository
 import com.example.crycast.ui.theme.CrycastTheme
 import com.example.crycast.ui.view.SetupNav
-import com.example.crycast.ui.view.dataStore
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import org.hildan.krossbow.stomp.config.StompConfig
@@ -37,10 +36,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        dataStore = DataStoreManager(this)
-
-        var intent = Intent(this, WebsocketService::class.java)
-        startService(intent)
 
         setContent {
 

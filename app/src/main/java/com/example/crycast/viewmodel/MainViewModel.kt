@@ -16,18 +16,7 @@ import com.example.crycast.repository.UserRepository
 import com.example.crycast.services.CrycastApiService
 import com.example.crycast.services.UsersApiService
 import com.example.crycast.ui.view.currentUser
-import com.example.crycast.ui.view.dataStore
 import com.example.crycast.ui.view.destinationUser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import org.hildan.krossbow.stomp.config.StompConfig
-import org.hildan.krossbow.stomp.sendText
-import org.hildan.krossbow.stomp.stomp
-import org.hildan.krossbow.websocket.okhttp.OkHttpWebSocketClient
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -90,8 +79,10 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         return false
     }
 
-    fun createSampleUsers() {
-        userRepository.insertMany(sampleData)
+    suspend fun createSampleUsers() {
+        sampleData.forEach {
+            addUser(it)
+        }
     }
 }
 
