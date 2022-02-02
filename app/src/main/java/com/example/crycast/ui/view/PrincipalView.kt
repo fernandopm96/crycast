@@ -2,7 +2,6 @@ package com.example.crycast.ui.view
 
 import android.app.Activity
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -32,8 +31,8 @@ import com.example.crycast.viewmodel.DataStoreViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-var currentUser: User = User("0", "fernando@mail.com", "Fernando", null)
-var destinationUser: User = User("0", "fernando@mail.com", "Fernando", null)
+var currentUser: User = User(0, "fernando@mail.com", "Fernando", "Fernando",null)
+var destinationUser: User = User(0, "fernando@mail.com", "Fernando", "Fernando",null)
 
 @Composable
 fun GetMainScaffold(){

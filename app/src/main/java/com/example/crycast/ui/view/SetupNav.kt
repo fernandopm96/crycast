@@ -1,5 +1,6 @@
 package com.example.crycast.ui.view
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -17,27 +18,18 @@ lateinit var dataStore: DataStoreManager
 lateinit var navHostController: NavHostController
 @Composable
 fun SetupNav(navController: NavHostController){
-    var dataStoreViewModel: DataStoreViewModel = viewModel()
+
     var mainViewModel: MainViewModel = viewModel()
-    var scope = rememberCoroutineScope()
-
-    var idUser = dataStore.dataStoreUserId.collectAsState(initial = "").value
-    var mail = dataStore.dataStoreUserMail.collectAsState(initial = "").value
-    var name = dataStore.dataStoreUserName.collectAsState(initial = "").value
-
-    currentUser.id = idUser!!
-    currentUser.mail = mail!!
-    currentUser.name = name!!
-
+    if(!mainViewModel.anyUser()){
+        Log.i("USUARIOS", "NO HAY USUARIOS")
+        mainViewModel.createSampleUsers()
+    } else {
+        Log.i("USUARIOS", "HAY USUARIOS")
+    }
     navHostController = navController
     NavHost(
         navController = navController,
-        startDestination =
-        if(idUser == "0"){
-            Screen.LoginScreen.route
-        } else {
-            Screen.Splash.route
-        }
+        startDestination = Screen.LoginScreen.route
 
     ){
 

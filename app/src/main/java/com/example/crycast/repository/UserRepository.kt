@@ -8,16 +8,28 @@ import com.example.crycast.model.UserWithMessages
 
 class UserRepository(private val userDao: UserDao) {
 
- //   val getAllUsers: LiveData<List<UserWithMessages>> = userDao.getAllUsers()
-
-    fun anyUser(): Boolean{
+   fun anyUser(): Boolean{
         if(userDao.getAllUsers().isEmpty()){
             return false
         }
         return true
     }
+    fun mailExists(mail: String): Boolean {
+       var user = userDao.mailExists(mail)
+        if(user == null){
+            return false
+        }
+        return true
+    }
 
-    fun getUserById(id: String): UserWithMessages? {
+    fun login(mail: String, password: String):User? {
+        return userDao.login(mail, password)
+    }
+    fun insertMany(users: List<User>){
+        userDao.insertMany(users)
+    }
+
+    fun getUserById(id: Int): UserWithMessages? {
         return userDao.getUserById(id)
     }
     fun getUserByName(name: String): UserWithMessages? {

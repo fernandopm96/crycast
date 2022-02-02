@@ -131,7 +131,6 @@ fun CustomTextField(){
                             Log.i("JSON", jsonMsg)
                             scope.launch {
                                 mainViewModel.addMessage(msg)
-                                mainViewModel.conectaSocket(jsonMsg)
                                 Log.i("Mensaje registrado", value)
                             }
                             value = ""

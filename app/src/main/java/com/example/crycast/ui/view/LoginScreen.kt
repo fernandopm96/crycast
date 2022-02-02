@@ -30,24 +30,15 @@ import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 
-val users: List<User> = listOf(
-    User("1","fernando@mail.com", "Fernando", null),
-    User("2","jose@mail.com", "Jose", null),
-    User("3","ricardo@mail.com", "Sandra", null),
-    User("4","sandra@mail.com", "Ricardo", null)
-)
-
 
 @Composable
 fun LoginScreen() {
     val mainViewModel: MainViewModel = viewModel()
-    val scope = rememberCoroutineScope()
-    var idUser = dataStore.dataStoreUserId.collectAsState(initial = "").value
-    val context = LocalContext.current
     val mail = remember { mutableStateOf(TextFieldValue()) }
     val mailErrorState = remember { mutableStateOf(false) }
     val passwordErrorState = remember { mutableStateOf(false) }
     val password = remember { mutableStateOf(TextFieldValue()) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -91,7 +82,6 @@ fun LoginScreen() {
                 }
                 password.value = it
             },
-         //   modifier = Modifier.background(Color.White),
             isError = passwordErrorState.value,
             modifier = Modifier.fillMaxWidth(),
             label = {
@@ -136,12 +126,14 @@ fun LoginScreen() {
                             mailErrorState.value = false
 
                             if(!mailErrorState.value && !passwordErrorState.value){
-                                var credentials = Credentials(mail.value.text, password.value.text)
-
-                                scope.launch {
-                                    mainViewModel.login(credentials)
-
+                                if(mainViewModel.login(mail.value.text, password.value.text)){
+                                    navHostController.navigate(Screen.Splash.route)
                                 }
+                                else {
+                                    mailErrorState.value = true
+                                    passwordErrorState.value = true
+                                }
+
                             }
 
 

@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class PrivateMessage(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val crycastUserId: String,
+    val crycastUserId: Int,
     val text: String,
-    val crycastDestinationUserId: String,
+    val crycastDestinationUserId: Int,
     val createDate: String
 )

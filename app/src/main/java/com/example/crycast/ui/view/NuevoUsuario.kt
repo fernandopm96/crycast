@@ -42,8 +42,8 @@ fun crearUsuario(){
 
             IconButton(onClick = {
                 if(!name.isEmpty() || !email.isEmpty()){
-
-                    var user: User = User("0", name, email, null)
+                    if(!mainViewModel.mailExists(email)){
+                        var user: User = User(0, email, name, name, null)
                         scope.launch {
                             mainViewModel.addUser(user)
                             infoText = "Usuario añadido"
@@ -52,9 +52,15 @@ fun crearUsuario(){
                         name = ""
                         email = ""
                     }
-                    else{
-                        infoText = "Algún campo no es válido"
+                    else {
+                        infoText = "El email introducido ya pertenece a algún usuario."
                     }
+                }
+
+
+                else{
+                    infoText = "Algún campo no es válido"
+                }
 
             }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")

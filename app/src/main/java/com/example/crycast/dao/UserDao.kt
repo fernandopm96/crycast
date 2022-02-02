@@ -14,14 +14,21 @@ interface UserDao {
 
     @Transaction
     @Query("SELECT * FROM User u WHERE u.id != :id")
-    fun getUsers(id: String): LiveData<List<User>>
+    fun getUsers(id: Int): LiveData<List<User>>
 
     @Transaction
     @Query("SELECT * FROM User WHERE id = :id")
-    fun getUserById(id: String) : UserWithMessages?
+    fun getUserById(id: Int) : UserWithMessages?
+
     @Transaction
     @Query("SELECT * FROM User WHERE name = :name")
     fun getUserByName(name: String) : UserWithMessages?
+
+    @Query("SELECT * FROM User u WHERE u.mail = :mail")
+    fun mailExists(mail: String): User?
+
+    @Query("SELECT * FROM User u WHERE u.mail = :mail AND u.password = :password")
+    fun login(mail: String, password: String): User?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMany(users : List<User>)

@@ -35,6 +35,12 @@ import java.util.*
 class MainViewModel (application: Application) : AndroidViewModel(application) {
 
 
+    val sampleData: List<User> = listOf(
+        User(0, "sandra@mail.com","Sandra", "Sandra", null),
+        User(0, "fernando@mail.com","Fernando", "Fernando", null),
+        User(0, "jose@mail.com","Jose", "Jose", null)
+    )
+
     // ROOM
     private val db: CryCastDatabase = CryCastDatabase.getInstance(application)
     var userDao: UserDao = db.userDao()
@@ -50,12 +56,6 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     var messagesConversation: LiveData<List<PrivateMessage>> =
         messageDao.conversationMessages(currentUser.id, destinationUser.id)
 
-    // API
-    val usersApiService: UsersApiService = UsersApiService.getInstance()
-    val crycastApiService: CrycastApiService = CrycastApiService.getInstance()
-
-
-    var dataStoreManager: DataStoreManager = DataStoreManager(this.getApplication())
 
     suspend fun addMessage(msg: PrivateMessage) {
         messageRepository.addMessage(msg)
@@ -75,6 +75,32 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         Log.i("Fecha", currentDate)
 
     }
+    fun mailExists(mail:String): Boolean{
+        if(userRepository.mailExists(mail)){
+            return true
+        }
+        return false
+    }
+    fun login(mail: String, password: String): Boolean{
+        var user = userRepository.login(mail, password)
+        if(user != null){
+            currentUser = user
+            return true
+        }
+        return false
+    }
+
+    fun createSampleUsers() {
+        userRepository.insertMany(sampleData)
+    }
+}
+
+/*
+
+ // API
+    val usersApiService: UsersApiService = UsersApiService.getInstance()
+    val crycastApiService: CrycastApiService = CrycastApiService.getInstance()
+    var dataStoreManager: DataStoreManager = DataStoreManager(this.getApplication())
 
     //Recordar: Cambiar la version de kotlin, habilitar aaceso a red y parámetro de cleartext, importar subdependencias, uso de okHttpClient. No acepta conexiones a localhost!!!
     suspend fun conectaSocket(msg: String) {
@@ -99,7 +125,6 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
 
         Log.i("stomp", "mensaje enviado")
     }
-
     fun getUsers() {
         CoroutineScope(Dispatchers.IO).launch {
             var users = usersApiService.getUsers()
@@ -122,7 +147,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
             userDao.insertMany(users.body()!!)
         }
     }
-
+}
     fun login(credentials: Credentials){
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -147,6 +172,5 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     suspend fun updateDataUser(lastUpdate: String){
         dataStoreManager.setLastUpdate(lastUpdate)
     }
-
-}
+*/
 

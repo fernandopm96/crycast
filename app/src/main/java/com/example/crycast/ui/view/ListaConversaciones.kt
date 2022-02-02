@@ -1,5 +1,6 @@
 package com.example.crycast.ui.view
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -33,6 +34,7 @@ fun Conversaciones(){
         users?.let { usersList ->
 
             usersList.forEach{
+                Log.i("USUARIOS lista conversaciones", it.name)
                     Conversacion(it)
                     Divider()
 

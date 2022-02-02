@@ -25,7 +25,7 @@ fun chooseUser(){
     var mainViewModel: MainViewModel = viewModel()
     var scope = rememberCoroutineScope()
     val users by mainViewModel.allUsers.observeAsState()
-    var user: User? = null
+
     Scaffold(
         topBar = { TopBarCurrentUser()}
     ) {
@@ -33,9 +33,6 @@ fun chooseUser(){
 
         ) {
             if(mainViewModel.anyUser()) {
-
-                //Prueba
-                    mainViewModel.currentTime()
                 users?.let{
                     users!!.forEach {
                         Row(
@@ -44,7 +41,6 @@ fun chooseUser(){
                                 .height(50.dp)
                                 .clickable {
                                     currentUser = it
-                                    user = it
                                     navHostController.navigate(Screen.Splash.route)
                                 },
                             horizontalArrangement = Arrangement.Center,
@@ -58,11 +54,8 @@ fun chooseUser(){
                 }
             } else {
 
-                var initialUser = User("0", "fernando@mail.com", "Fernando", null)
-                currentUser = initialUser
-                user = initialUser
                 scope.launch {
-                    mainViewModel.addUser(initialUser)
+                    mainViewModel.addUser(currentUser)
                 }
                 Row() {
                     Text("No hay usuarios. Se ha creado el usuario Fernando")

@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import com.example.crycast.dao.PrivateMessageDao
 import com.example.crycast.model.User
 import com.example.crycast.dao.UserDao
+import com.example.crycast.model.Group
 import com.example.crycast.model.PrivateMessage
 import kotlinx.coroutines.CoroutineScope
 
-@Database(entities = arrayOf(User::class, PrivateMessage::class), version = 11)
+@Database(entities = arrayOf(User::class, PrivateMessage::class, Group::class), version = 1)
 abstract class CryCastDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun messageDao(): PrivateMessageDao

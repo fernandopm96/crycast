@@ -15,7 +15,7 @@ interface PrivateMessageDao {
     @Query("SELECT * FROM PrivateMessage" +
             " WHERE crycastUserId = :idUser AND crycastDestinationUserId = :idDestinationUser " +
             "OR crycastUserId = :idDestinationUser AND crycastDestinationUserId = :idUser")
-    fun conversationMessages(idUser: String, idDestinationUser: String): LiveData<List<PrivateMessage>>
+    fun conversationMessages(idUser: Int, idDestinationUser: Int): LiveData<List<PrivateMessage>>
 
     @Insert
     suspend fun insert(message: PrivateMessage)

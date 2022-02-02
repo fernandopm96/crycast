@@ -5,15 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class User(
-    @PrimaryKey
+data class Group(
+    @PrimaryKey(autoGenerate = true)
     var id: Int,
-    @ColumnInfo
-    var mail: String,
-    @ColumnInfo
-    var password: String,
     @ColumnInfo
     var name: String,
     @ColumnInfo
-    var pathImage: String?
+    var description: String
 )
