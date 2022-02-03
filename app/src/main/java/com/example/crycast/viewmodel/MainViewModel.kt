@@ -4,11 +4,13 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import com.example.crycast.dao.GroupDao
 import com.example.crycast.dto.Credentials
 import com.example.crycast.dao.PrivateMessageDao
 import com.example.crycast.dao.UserDao
 import com.example.crycast.database.CryCastDatabase
 import com.example.crycast.model.DataStoreManager
+import com.example.crycast.model.Group
 import com.example.crycast.model.PrivateMessage
 import com.example.crycast.model.User
 import com.example.crycast.repository.PrivateMessageRepository
@@ -33,6 +35,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     // ROOM
     private val db: CryCastDatabase = CryCastDatabase.getInstance(application)
     var userDao: UserDao = db.userDao()
+    var groupDao: GroupDao = db.groupDao()
     var messageDao: PrivateMessageDao = db.messageDao()
     var userRepository: UserRepository = UserRepository(userDao)
     var messageRepository: PrivateMessageRepository = PrivateMessageRepository(messageDao)
@@ -83,6 +86,10 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         sampleData.forEach {
             addUser(it)
         }
+    }
+
+    suspend fun createGroup(newGroup: Group) {
+        groupDao.insert(newGroup)
     }
 }
 

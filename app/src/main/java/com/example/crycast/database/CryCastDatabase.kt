@@ -4,16 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.crycast.dao.GroupDao
 import com.example.crycast.dao.PrivateMessageDao
 import com.example.crycast.model.User
 import com.example.crycast.dao.UserDao
 import com.example.crycast.model.Group
+import com.example.crycast.model.GroupsUsers
 import com.example.crycast.model.PrivateMessage
 import kotlinx.coroutines.CoroutineScope
 
-@Database(entities = arrayOf(User::class, PrivateMessage::class, Group::class), version = 2)
+@Database(entities = arrayOf(User::class, PrivateMessage::class, Group::class, GroupsUsers::class), version = 3)
 abstract class CryCastDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun groupDao(): GroupDao
     abstract fun messageDao(): PrivateMessageDao
     // Objeto que sigue el patrón singleton
 
