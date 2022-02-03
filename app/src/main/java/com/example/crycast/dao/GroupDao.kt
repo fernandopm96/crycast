@@ -13,6 +13,7 @@ interface GroupDao {
     @Query("SELECT * FROM `Group`")
     fun getAllGroups(): LiveData<List<Group>>
 
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(group: Group): Long
 }

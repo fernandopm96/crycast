@@ -10,8 +10,10 @@ import com.example.crycast.dao.PrivateMessageDao
 import com.example.crycast.dao.UserDao
 import com.example.crycast.database.CryCastDatabase
 import com.example.crycast.model.*
+import com.example.crycast.repository.GroupUsersRepository
 import com.example.crycast.repository.PrivateMessageRepository
 import com.example.crycast.repository.UserRepository
+import com.example.crycast.ui.view.currentGroup
 import com.example.crycast.ui.view.currentUser
 import com.example.crycast.ui.view.destinationUser
 import com.example.crycast.ui.view.newGroup
@@ -33,12 +35,24 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     var groupDao: GroupDao = db.groupDao()
     var messageDao: PrivateMessageDao = db.messageDao()
     var groupsUsersDao: GroupsUsersDao = db.groupsUsersDao()
+
     var userRepository: UserRepository = UserRepository(userDao)
     var messageRepository: PrivateMessageRepository = PrivateMessageRepository(messageDao)
-    // Usuarios
+    var groupUsersRepository: GroupUsersRepository = GroupUsersRepository(groupsUsersDao)
 
+    // Usuarios
     var _allUsers = db.userDao().getUsers(currentUser.userId)
     val allUsers: LiveData<List<User>> = _allUsers
+
+    // Grupos
+    var _allGroups = db.groupsUsersDao().getGroupsWithUsers()
+    val allGroups: LiveData<List<GroupWithUsers>> = _allGroups
+
+    var _membersGroup = db.userDao().membersGroup(currentGroup.group.groupId)
+    val membersGroup: LiveData<List<User>> = _membersGroup
+
+    var _notIncludedMembers = db.userDao().getUsersNotIncludedInGroup(currentGroup.group.groupId)
+    val notIncludedMembers: LiveData<List<User>> = _notIncludedMembers
 
     // Mensajes
     var messagesConversation: LiveData<List<PrivateMessage>> =
@@ -55,6 +69,9 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
 
     fun anyUser(): Boolean {
         return userRepository.anyUser()
+    }
+    fun anyGroup(): Boolean {
+        return groupUsersRepository.anyGroup()
     }
 
     fun currentTime() {
@@ -88,11 +105,20 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         return groupDao.insert(newGroup)
     }
 
-    fun addUsersToGroup(groupId: Long, selectedUsers: MutableList<User>){
+    suspend fun setUsersToGroup(groupId: Long, selectedUsers: MutableList<User>){
         selectedUsers.add(currentUser)
         selectedUsers.forEach {
             groupsUsersDao.joinGroupUser(GroupsUsers(groupId, it.userId))
         }
+    }
+    suspend fun addUsersToGroup(groupId: Long, selectedUsers: MutableList<User>){
+        selectedUsers.forEach {
+            groupsUsersDao.joinGroupUser(GroupsUsers(groupId, it.userId))
+        }
+    }
+
+    suspend fun removeMember(user: User) {
+        groupsUsersDao.delete(GroupsUsers(currentGroup.group.groupId, user.userId))
     }
 }
 

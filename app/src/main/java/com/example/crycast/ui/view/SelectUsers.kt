@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,8 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
 import com.example.crycast.model.User
-import com.example.crycast.ui.Screen
-import com.example.crycast.ui.theme.PrimaryDark
 import com.example.crycast.ui.theme.PrimaryLight
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
@@ -43,8 +40,8 @@ fun selectUsers(){
             } else {
                 scope.launch {
                     var groupId = mainViewModel.createGroup(newGroup)
-                    mainViewModel.addUsersToGroup(groupId, selectedUsers)
-
+                    mainViewModel.setUsersToGroup(groupId, selectedUsers)
+                    selectedUsers = mutableListOf()
                 }
             }
         }) {

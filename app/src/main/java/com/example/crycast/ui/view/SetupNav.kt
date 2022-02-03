@@ -19,7 +19,7 @@ lateinit var navHostController: NavHostController
 fun SetupNav(navController: NavHostController){
 
     var mainViewModel: MainViewModel = viewModel()
-    var users = mainViewModel.allUsers.observeAsState()
+    var groups = mainViewModel.allGroups.observeAsState()
     var scope = rememberCoroutineScope()
     if(!mainViewModel.anyUser()){
         Log.i("USUARIOS", "NO HAY USUARIOS")
@@ -27,14 +27,22 @@ fun SetupNav(navController: NavHostController){
             mainViewModel.createSampleUsers()
         }
 
-    } else {
-        Log.i("USUARIOS", "HAY USUARIOS")
-        users.value?.let {
-            users.value!!.forEach {
-                Log.i("USUARIOS", it.name)
+    }
+    if(mainViewModel.anyGroup()){
+        groups.value?.let {
+            groups.value!!.forEach {
+                Log.i("GRUPOS", it.group.name)
+                if(!it.users.isEmpty()){
+                    it.users.forEach {
+                        Log.i("GRUPOS USUARIO", it.name)
+                    }
+                }
+
             }
         }
     }
+
+
 
     navHostController = navController
     NavHost(
@@ -59,8 +67,14 @@ fun SetupNav(navController: NavHostController){
         composable(route = Screen.ViewConversation.route){
             ViewConversation()
         }
+        composable(route = Screen.ViewConversationGroup.route){
+            ViewConversationGroup()
+        }
         composable(route = Screen.ViewProfile.route){
             ProfileView()
+        }
+        composable(route = Screen.GroupProfile.route){
+            GroupProfile()
         }
         composable(route = Screen.CreateUser.route){
             createUser()
@@ -70,6 +84,9 @@ fun SetupNav(navController: NavHostController){
         }
         composable(route = Screen.SelectUsers.route){
             selectUsers()
+        }
+        composable(route = Screen.AddMembersToGroup.route){
+            addMembers()
         }
 
 

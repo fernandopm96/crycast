@@ -1,20 +1,25 @@
 package com.example.crycast.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.example.crycast.model.GroupWithUsers
 import com.example.crycast.model.GroupsUsers
+import java.nio.charset.CodingErrorAction.REPLACE
 
 @Dao
 interface GroupsUsersDao {
 
-    @Insert
-    fun joinGroupUser(join: GroupsUsers)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun joinGroupUser(join: GroupsUsers)
 
     @Transaction
     @Query("SELECT * FROM `Group`")
-    fun getCourses(): List<GroupWithUsers>
+    fun anyGroup(): List<GroupWithUsers>
 
+    @Transaction
+    @Query("SELECT * FROM `Group`")
+    fun getGroupsWithUsers(): LiveData<List<GroupWithUsers>>
+
+    @Delete
+    suspend fun delete(groupUsers: GroupsUsers)
 }

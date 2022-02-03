@@ -14,6 +14,12 @@ interface UserDao {
     @Query("SELECT * FROM User")
     fun anyUsers(): List<User>
 
+    @Query("SELECT * FROM User u WHERE u.userId IN (SELECT g.userId FROM GroupsUsers g WHERE g.groupId = :groupId)")
+    fun membersGroup(groupId: Long): LiveData<List<User>>
+
+    @Query("SELECT * FROM User u WHERE u.userId NOT IN (SELECT g.userId FROM GroupsUsers g WHERE g.groupId = :groupId)")
+    fun getUsersNotIncludedInGroup(groupId: Long): LiveData<List<User>>
+
     @Transaction
     @Query("SELECT * FROM User u WHERE u.userId != :id")
     fun getUsers(id: Int): LiveData<List<User>>
