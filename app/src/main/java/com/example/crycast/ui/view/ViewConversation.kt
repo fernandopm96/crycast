@@ -121,9 +121,9 @@ fun CustomTextField(){
 
                             var msg = PrivateMessage(
                                 0,
-                                currentUser.id,
+                                currentUser.userId,
                                 value,
-                                destinationUser.id,
+                                destinationUser.userId,
                                 currentDate
                             )
                             // JSON
@@ -167,7 +167,7 @@ fun ViewConversation(){
                 ) {
                     messages?.let{
                         items(messages!!.reversed()) {
-                            if(it.crycastUserId != destinationUser.id)
+                            if(it.crycastUserId != destinationUser.userId)
                                 MessageBox(it)
                             else
                                 OtherMessageBox(msg = it)

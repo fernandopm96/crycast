@@ -7,7 +7,7 @@ import androidx.room.Relation
 data class UserWithMessages (
     @Embedded val user: User,
     @Relation(
-        parentColumn = "id",
+        parentColumn = "userId",
         entityColumn = "crycastUserId"
     )
     val messages: List<PrivateMessage>?

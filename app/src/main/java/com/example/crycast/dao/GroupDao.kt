@@ -14,5 +14,5 @@ interface GroupDao {
     fun getAllGroups(): LiveData<List<Group>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(group: Group)
+    suspend fun insert(group: Group): Long
 }

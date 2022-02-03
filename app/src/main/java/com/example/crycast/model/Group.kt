@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Group(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    var groupId: Long,
     @ColumnInfo
     var name: String,
     @ColumnInfo

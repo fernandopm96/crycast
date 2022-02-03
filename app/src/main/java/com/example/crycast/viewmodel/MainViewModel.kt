@@ -5,22 +5,17 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.example.crycast.dao.GroupDao
-import com.example.crycast.dto.Credentials
+import com.example.crycast.dao.GroupsUsersDao
 import com.example.crycast.dao.PrivateMessageDao
 import com.example.crycast.dao.UserDao
 import com.example.crycast.database.CryCastDatabase
-import com.example.crycast.model.DataStoreManager
-import com.example.crycast.model.Group
-import com.example.crycast.model.PrivateMessage
-import com.example.crycast.model.User
+import com.example.crycast.model.*
 import com.example.crycast.repository.PrivateMessageRepository
 import com.example.crycast.repository.UserRepository
-import com.example.crycast.services.CrycastApiService
-import com.example.crycast.services.UsersApiService
 import com.example.crycast.ui.view.currentUser
 import com.example.crycast.ui.view.destinationUser
+import com.example.crycast.ui.view.newGroup
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.util.*
 
 class MainViewModel (application: Application) : AndroidViewModel(application) {
@@ -37,16 +32,17 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     var userDao: UserDao = db.userDao()
     var groupDao: GroupDao = db.groupDao()
     var messageDao: PrivateMessageDao = db.messageDao()
+    var groupsUsersDao: GroupsUsersDao = db.groupsUsersDao()
     var userRepository: UserRepository = UserRepository(userDao)
     var messageRepository: PrivateMessageRepository = PrivateMessageRepository(messageDao)
     // Usuarios
 
-    var _allUsers = db.userDao().getUsers(currentUser.id)
+    var _allUsers = db.userDao().getUsers(currentUser.userId)
     val allUsers: LiveData<List<User>> = _allUsers
 
     // Mensajes
     var messagesConversation: LiveData<List<PrivateMessage>> =
-        messageDao.conversationMessages(currentUser.id, destinationUser.id)
+        messageDao.conversationMessages(currentUser.userId, destinationUser.userId)
 
 
     suspend fun addMessage(msg: PrivateMessage) {
@@ -88,8 +84,15 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
         }
     }
 
-    suspend fun createGroup(newGroup: Group) {
-        groupDao.insert(newGroup)
+    suspend fun createGroup(newGroup: Group): Long {
+        return groupDao.insert(newGroup)
+    }
+
+    fun addUsersToGroup(groupId: Long, selectedUsers: MutableList<User>){
+        selectedUsers.add(currentUser)
+        selectedUsers.forEach {
+            groupsUsersDao.joinGroupUser(GroupsUsers(groupId, it.userId))
+        }
     }
 }
 

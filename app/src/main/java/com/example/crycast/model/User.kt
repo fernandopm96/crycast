@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class User(
     @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    var userId: Int,
     @ColumnInfo
     var mail: String,
     @ColumnInfo

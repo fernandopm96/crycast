@@ -5,12 +5,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,12 +16,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.model.Group
 import com.example.crycast.model.GroupWithUsers
-import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.ui.theme.PrimaryDark
-import com.example.crycast.ui.theme.PrimaryLight
 import com.example.crycast.viewmodel.MainViewModel
-import kotlinx.coroutines.launch
 
 lateinit var newGroup: Group
 lateinit var newGroupWithUsers: GroupWithUsers

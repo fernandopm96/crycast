@@ -42,11 +42,9 @@ fun selectUsers(){
                 Log.i("USUARIOS SELECCIONADOS", "NO HAY")
             } else {
                 scope.launch {
-                    mainViewModel.createGroup(newGroup)
+                    var groupId = mainViewModel.createGroup(newGroup)
+                    mainViewModel.addUsersToGroup(groupId, selectedUsers)
 
-                }
-                selectedUsers.forEach{
-                    Log.i("USUARIOS SELECCIONADOS", it.name)
                 }
             }
         }) {
