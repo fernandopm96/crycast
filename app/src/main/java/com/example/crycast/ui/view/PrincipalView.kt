@@ -1,5 +1,6 @@
 package com.example.crycast.ui.view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.util.Log
 import androidx.activity.compose.BackHandler
@@ -23,6 +24,7 @@ import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.viewmodel.DataStoreViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 var currentUser: User = User(0, "fernando@mail.com", "Fernando", "Fernando",null)
@@ -101,6 +103,7 @@ fun MenuSuperiorPrincipal(
 
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun DesplegableOpciones(
     scope: CoroutineScope,
@@ -108,6 +111,10 @@ fun DesplegableOpciones(
 ) {
     val dataStoreViewModel: DataStoreViewModel = viewModel()
     var userProfile = remember{ mutableStateOf(currentUser) }
+    var darkMode = remember{ mutableStateOf(false)}
+    scope.launch {
+        if(dataStoreViewModel.dataStoreTheme.first() == "DARK") darkMode.value = true else darkMode.value = false
+    }
     val context = LocalContext.current
     val logout = remember { mutableStateOf(false) }
 
@@ -134,11 +141,11 @@ fun DesplegableOpciones(
                 onClick = {
                     scope.launch {
                         dataStoreViewModel.themeChange()
-                        Log.i("BOTON", "CAMBIA TEMA")
                     }
+
                 }) {
                 Icon(
-                    painter = painterResource(R.drawable.moon),
+                    painter = if(darkMode.value) painterResource(id = R.drawable.ic_sun) else painterResource(R.drawable.moon),
                     contentDescription = "Change theme"
                 )
 

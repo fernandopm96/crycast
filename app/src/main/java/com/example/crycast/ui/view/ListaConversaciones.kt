@@ -9,9 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Divider
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,16 +28,44 @@ import com.example.crycast.model.GroupWithUsers
 import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
 import com.example.crycast.viewmodel.MainViewModel
+import com.google.android.material.tabs.TabLayout
 
 
 @Composable
 fun Conversaciones(){
+    var tabIndex by remember { mutableStateOf(0) }
+    val tabData = listOf(
+        "USUARIOS",
+        "GRUPOS",
+    )
+    Column() {
+        TabRow(selectedTabIndex = tabIndex) {
+            tabData.forEachIndexed { index, text ->
+                Tab(selected = tabIndex == index, onClick = {
+                    tabIndex = index
+
+                }, text = {
+                    Text(text = text)
+                })
+            }
+        }
+        if(tabIndex == 0){
+            PrivateConversations()
+        } else {
+            GroupConversations()
+        }
+    }
+
+}
+
+@Composable
+fun GroupConversations(){
     val mainViewModel: MainViewModel = viewModel()
-    val users by mainViewModel.allUsers.observeAsState()
     val groups by mainViewModel.allGroups.observeAsState()
 
     LazyColumn(
         state = rememberLazyListState(),
+        modifier = Modifier.heightIn(0.dp)
     ) {
         groups?.let {
             items(groups!!){
@@ -44,7 +73,15 @@ fun Conversaciones(){
             }
         }
     }
+}
+
+@Composable
+fun PrivateConversations(){
+    val mainViewModel: MainViewModel = viewModel()
+    val users by mainViewModel.allUsers.observeAsState()
+
     LazyColumn(
+        modifier = Modifier.fillMaxHeight(),
         state = rememberLazyListState()
     ){
         users?.let {
@@ -54,6 +91,7 @@ fun Conversaciones(){
         }
     }
 }
+
 @Composable
 fun Conversacion(user: User){
 

@@ -17,8 +17,8 @@ interface GroupsUsersDao {
     fun anyGroup(): List<GroupWithUsers>
 
     @Transaction
-    @Query("SELECT * FROM `Group`")
-    fun getGroupsWithUsers(): LiveData<List<GroupWithUsers>>
+    @Query("SELECT * FROM `Group` WHERE groupId IN (SELECT groupId FROM GroupsUsers WHERE userId = :userId)")
+    fun getGroupsWithUsers(userId: Int): LiveData<List<GroupWithUsers>>
 
     @Delete
     suspend fun delete(groupUsers: GroupsUsers)

@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -12,10 +14,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,11 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
+import com.example.crycast.model.User
 import com.example.crycast.ui.Screen
+import com.example.crycast.ui.theme.PrimaryDark
 import com.example.crycast.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.util.stream.Collectors
 
+var userToRemove: User = User(0, "", "", "", null)
 
 @Composable
 fun GroupProfile(){
@@ -100,11 +103,12 @@ fun Members(){
     var scope = rememberCoroutineScope()
 
     if(mainViewModel.anyGroup()){
-        Column(
+        LazyColumn(
             modifier = Modifier.fillMaxWidth(),
         ) {
+
             users.value?.let {
-                users.value!!.forEach { user ->
+                items(users.value!!){ user ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -113,9 +117,9 @@ fun Members(){
                             .pointerInput(Unit) {
                                 detectTapGestures(
                                     onLongPress = {
+                                        userToRemove = user
                                         scope.launch {
-                                            mainViewModel.removeMember(user)
-                                            navHostController.navigate(Screen.GroupProfile.route)
+                                            navHostController.navigate(Screen.RemoveDialog.route)
                                         }
                                     }
                                 )
@@ -146,6 +150,55 @@ fun Members(){
     }
 
 }
+@Composable
+fun removeDialog() : Boolean {
+
+    var removeUser: Boolean = false
+    val openDialog = remember { mutableStateOf(true) }
+    var mainViewModel: MainViewModel = viewModel()
+    var scope = rememberCoroutineScope()
+
+
+    AlertDialog(
+        onDismissRequest = {
+            openDialog.value = false
+        },
+        title = {
+            Text(text = "Eliminar participante")
+        },
+        text = {
+            Text(text = "¿Seguro que quieres eliminar a " + userToRemove.name + "?")
+        },
+        buttons = {
+            Row(
+                modifier = Modifier.padding(all = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                        navHostController.popBackStack()
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+                Button(
+                    onClick = {
+                        scope.launch{
+                            mainViewModel.removeMember(userToRemove)
+                        }
+                        openDialog.value = false
+                        navHostController.popBackStack()
+                    }
+                ) {
+                    Text("Aceptar")
+                }
+            }
+        }
+    )
+    return removeUser
+}
+
 
 
 @Composable

@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import com.example.crycast.model.User
-import com.example.crycast.model.UserWithMessages
 
 @Dao
 interface UserDao {
@@ -23,14 +22,6 @@ interface UserDao {
     @Transaction
     @Query("SELECT * FROM User u WHERE u.userId != :id")
     fun getUsers(id: Int): LiveData<List<User>>
-
-    @Transaction
-    @Query("SELECT * FROM User WHERE userId = :id")
-    fun getUserById(id: Int) : UserWithMessages?
-
-    @Transaction
-    @Query("SELECT * FROM User WHERE name = :name")
-    fun getUserByName(name: String) : UserWithMessages?
 
     @Query("SELECT * FROM User u WHERE u.mail = :mail")
     fun mailExists(mail: String): User?

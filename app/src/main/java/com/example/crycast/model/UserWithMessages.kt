@@ -4,11 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 
-data class UserWithMessages (
-    @Embedded val user: User,
+data class MessageGroupWithUser (
+    @Embedded val groupMessage: GroupMessage,
     @Relation(
         parentColumn = "userId",
-        entityColumn = "crycastUserId"
+        entityColumn = "userId"
     )
-    val messages: List<PrivateMessage>?
+    val user: User
     )

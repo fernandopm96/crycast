@@ -4,19 +4,14 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.example.crycast.dao.GroupDao
-import com.example.crycast.dao.GroupsUsersDao
-import com.example.crycast.dao.PrivateMessageDao
-import com.example.crycast.dao.UserDao
+import com.example.crycast.dao.*
 import com.example.crycast.database.CryCastDatabase
 import com.example.crycast.model.*
 import com.example.crycast.repository.GroupUsersRepository
 import com.example.crycast.repository.PrivateMessageRepository
 import com.example.crycast.repository.UserRepository
-import com.example.crycast.ui.view.currentGroup
-import com.example.crycast.ui.view.currentUser
-import com.example.crycast.ui.view.destinationUser
-import com.example.crycast.ui.view.newGroup
+import com.example.crycast.ui.Screen
+import com.example.crycast.ui.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,6 +29,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     var userDao: UserDao = db.userDao()
     var groupDao: GroupDao = db.groupDao()
     var messageDao: PrivateMessageDao = db.messageDao()
+    var groupMessageDao: GroupMessageDao = db.groupMessageDao()
     var groupsUsersDao: GroupsUsersDao = db.groupsUsersDao()
 
     var userRepository: UserRepository = UserRepository(userDao)
@@ -45,7 +41,7 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     val allUsers: LiveData<List<User>> = _allUsers
 
     // Grupos
-    var _allGroups = db.groupsUsersDao().getGroupsWithUsers()
+    var _allGroups = db.groupsUsersDao().getGroupsWithUsers(currentUser.userId)
     val allGroups: LiveData<List<GroupWithUsers>> = _allGroups
 
     var _membersGroup = db.userDao().membersGroup(currentGroup.group.groupId)
@@ -58,6 +54,8 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
     var messagesConversation: LiveData<List<PrivateMessage>> =
         messageDao.conversationMessages(currentUser.userId, destinationUser.userId)
 
+    var messagesGroup: LiveData<List<MessageGroupWithUser>> =
+        groupMessageDao.messagesGroup(currentGroup.group.groupId)
 
     suspend fun addMessage(msg: PrivateMessage) {
         messageRepository.addMessage(msg)
@@ -119,6 +117,11 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
 
     suspend fun removeMember(user: User) {
         groupsUsersDao.delete(GroupsUsers(currentGroup.group.groupId, user.userId))
+        userToRemove = User(0, "", "", "", null)
+    }
+
+    suspend fun addGroupMessage(msg: GroupMessage) {
+        groupMessageDao.insert(msg)
     }
 }
 

@@ -89,6 +89,9 @@ fun SetupNav(navController: NavHostController){
             addMembers()
         }
 
+        composable(route = Screen.RemoveDialog.route){
+            removeDialog()
+        }
 
     }
 }

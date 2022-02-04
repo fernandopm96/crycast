@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -22,17 +23,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.crycast.R
-import com.example.crycast.model.Group
-import com.example.crycast.model.GroupWithUsers
-import com.example.crycast.model.PrivateMessage
-import com.example.crycast.model.User
+import com.example.crycast.model.*
 import com.example.crycast.ui.Screen
-import com.example.crycast.ui.theme.Background
-import com.example.crycast.ui.theme.SecondaryLight
+import com.example.crycast.ui.theme.*
 import com.example.crycast.viewmodel.DataStoreViewModel
 import com.example.crycast.viewmodel.MainViewModel
 import com.google.gson.Gson
@@ -122,26 +120,24 @@ fun CustomTextFieldGroup(){
                 modifier = Modifier
                     .absolutePadding(0.dp, 0.dp, 20.dp, 0.dp)
                     .clickable {
-                       /* if (value != "") {
+                        if (value != "") {
                             val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
                             val currentDate = sdf.format(Date())
 
-                            var msg = PrivateMessage(
+                            var msg = GroupMessage(
                                 0,
                                 currentUser.userId,
+                                currentGroup.group.groupId,
                                 value,
-                                destinationUser.userId,
                                 currentDate
                             )
                             // JSON
-                            var jsonMsg = Gson().toJson(msg)
-                            Log.i("JSON", jsonMsg)
                             scope.launch {
-                                mainViewModel.addMessage(msg)
+                                mainViewModel.addGroupMessage(msg)
                                 Log.i("Mensaje registrado", value)
                             }
                             value = ""
-                        }*/
+                        }
                     })
         }
     )
@@ -154,13 +150,16 @@ fun ViewConversationGroup(){
 
     val theme = dataStoreViewModel.dataStoreTheme.collectAsState("").value
     val mainViewModel: MainViewModel = viewModel()
+    val messagesGroup by mainViewModel.messagesGroup.observeAsState()
 
     Scaffold(
         topBar = { TopBarConversationGroup() },
     ){
-        Column(modifier = Modifier.fillMaxSize().background(
-            color = if (theme.equals("LIGHT")) Background else SecondaryLight
-        )
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(
+                color = if (theme.equals("LIGHT")) Background else SecondaryLight
+            )
         ){
             Column(modifier = Modifier.weight(0.8f)) {
                 LazyColumn(
@@ -171,7 +170,15 @@ fun ViewConversationGroup(){
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.Top
                 ) {
-
+                    messagesGroup?.let {
+                        items(messagesGroup!!.reversed()){
+                            if(it.user.userId == currentUser.userId){
+                                MessageBoxGroup(msg = it.groupMessage)
+                            } else {
+                                OtherMessageBoxGroup(msg = it)
+                            }
+                        }
+                    }
                 }
             }
             CustomTextFieldGroup()
@@ -179,5 +186,113 @@ fun ViewConversationGroup(){
 
 
     }
+
+}
+@Composable
+fun MessageBoxGroup(msg: GroupMessage){
+    var dataStoreViewModel: DataStoreViewModel = viewModel()
+
+    val theme = dataStoreViewModel.dataStoreTheme.collectAsState("").value
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.End)
+                .widthIn(100.dp, 300.dp)
+                .padding(5.dp)
+                .background(
+                    color = if (theme.equals("LIGHT")) PrimaryLight else PrimaryDarkVariant,
+                    shape = RoundedCornerShape(10.dp)
+                ),
+        ) {
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val sdf2 = SimpleDateFormat("hh:mm")
+            val msgDate = Date(sdf.parse(msg.createDate).getTime())
+
+            Text(
+                text = msg.text,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .absolutePadding(15.dp, 5.dp, 20.dp, 5.dp)
+                    .align(Alignment.TopStart)
+            )
+            Text(
+                text = sdf2.format(msgDate),
+                color = Color.White,
+                fontWeight = FontWeight.Normal,
+                fontSize = 10.sp,
+                modifier = Modifier
+                    .absolutePadding(30.dp, 30.dp, 10.dp, 5.dp)
+                    .align(Alignment.BottomEnd)
+            )
+
+        }
+    }
+
+
+}
+@Composable
+fun OtherMessageBoxGroup(msg: MessageGroupWithUser){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .widthIn(100.dp, 300.dp)
+                .padding(5.dp)
+                .background(color = GrayMessages, shape = RoundedCornerShape(10.dp)),
+        ) {
+            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val sdf2 = SimpleDateFormat("hh:mm")
+            val msgDate = Date(sdf.parse(msg.groupMessage.createDate).getTime())
+            Column(){
+                Row(
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = msg.user.name,
+                        color = Color.Red,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .absolutePadding(15.dp, 5.dp, 5.dp, 0.dp)
+                    )
+                }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = msg.groupMessage.text,
+                        color = Color.Black,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                        modifier = Modifier
+                            .absolutePadding(15.dp, 5.dp, 20.dp, 5.dp)
+                    )
+                    Text(
+                        text = sdf2.format(msgDate),
+                        color = Color.Black,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 10.sp,
+                        modifier = Modifier
+                            .absolutePadding(30.dp, 30.dp, 10.dp, 5.dp)
+                    )
+
+                }
+            }
+
+
+
+
+        }
+    }
+
 
 }

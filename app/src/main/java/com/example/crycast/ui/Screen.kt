@@ -13,4 +13,5 @@ sealed class Screen(val route: String) {
     object CreateGroup : Screen("create_group")
     object SelectUsers : Screen("select_users")
     object AddMembersToGroup : Screen("addmembers_group")
+    object RemoveDialog: Screen("remove_members_group")
 }
