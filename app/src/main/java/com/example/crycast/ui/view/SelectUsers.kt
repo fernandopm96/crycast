@@ -105,6 +105,8 @@ var selectedUsers: MutableList<User> = mutableListOf()
 @SuppressLint("CoroutineCreationDuringComposition", "UnrememberedMutableState")
 @Composable
 fun userItem(user: User){
+    var dataStoreViewModel: DataStoreViewModel = viewModel()
+    var darkMode = dataStoreViewModel.dataStoreTheme.collectAsState("").value
 
     var selected = remember { mutableStateOf(false) }
 
@@ -123,7 +125,7 @@ fun userItem(user: User){
                 }
             }
         }
-        .background(if (selected.value) PrimaryLight else MaterialTheme.colors.onPrimary)
+        .background(if (selected.value) PrimaryLight else if(darkMode == "LIGHT") Color.White else PrimaryDark,)
     ) {
 
         Column(
@@ -149,6 +151,7 @@ fun userItem(user: User){
                 .fillMaxHeight()
                 .weight(0.8f)) {
             Text(user.name,
+                color = if(darkMode == "LIGHT") Color.Black else Color.White,
                 fontSize = (16.sp),
                 modifier = Modifier.absolutePadding(10.dp,15.dp,0.dp, 0.dp))
         }

@@ -111,10 +111,8 @@ fun DesplegableOpciones(
 ) {
     val dataStoreViewModel: DataStoreViewModel = viewModel()
     var userProfile = remember{ mutableStateOf(currentUser) }
-    var darkMode = remember{ mutableStateOf(false)}
-    scope.launch {
-        if(dataStoreViewModel.dataStoreTheme.first() == "DARK") darkMode.value = true else darkMode.value = false
-    }
+    var darkMode = dataStoreViewModel.dataStoreTheme.collectAsState("").value
+
     val context = LocalContext.current
     val logout = remember { mutableStateOf(false) }
 
@@ -145,7 +143,7 @@ fun DesplegableOpciones(
 
                 }) {
                 Icon(
-                    painter = if(darkMode.value) painterResource(id = R.drawable.ic_sun) else painterResource(R.drawable.moon),
+                    painter = if(darkMode == "LIGHT") painterResource(id = R.drawable.ic_sun) else painterResource(R.drawable.moon),
                     contentDescription = "Change theme"
                 )
 
