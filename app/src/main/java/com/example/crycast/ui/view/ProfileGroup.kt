@@ -171,8 +171,11 @@ fun removeDialog() : Boolean {
         },
         buttons = {
             Row(
-                modifier = Modifier.padding(all = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
+                horizontalArrangement = Arrangement.SpaceAround
+
             ) {
                 Button(
                     onClick = {

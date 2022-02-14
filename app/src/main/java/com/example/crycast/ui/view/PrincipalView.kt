@@ -201,9 +201,7 @@ fun DesplegableOpciones(
         ) {
             Text("Cerrar sesión")
             IconButton(onClick = {
-                scope.launch {
-
-                }
+                navHostController.navigate(Screen.LoginScreen.route)
             }) {
                 Icon(imageVector = Icons.Filled.Logout, contentDescription = "Cerrar sesión")
             }
