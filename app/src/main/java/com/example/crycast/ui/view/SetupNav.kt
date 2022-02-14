@@ -41,9 +41,6 @@ fun SetupNav(navController: NavHostController){
             }
         }
     }
-
-
-
     navHostController = navController
     NavHost(
         navController = navController,
