@@ -79,7 +79,7 @@ fun MenuSuperiorPrincipal(
             }
         },
         backgroundColor = MaterialTheme.colors.primary,
-        actions = {
+    /*    actions = {
             IconButton(onClick = {
                 showMenu = !showMenu
             }) {
@@ -97,7 +97,7 @@ fun MenuSuperiorPrincipal(
                     Text("Nuevo grupo")
                 }
             }
-        }
+        }*/
     )
 
 

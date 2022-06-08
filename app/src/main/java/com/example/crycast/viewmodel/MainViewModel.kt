@@ -19,9 +19,17 @@ class MainViewModel (application: Application) : AndroidViewModel(application) {
 
 
     val sampleData: List<User> = listOf(
-        User(0, "sandra@mail.com","Sandra", "Sandra", null),
+        User(0, "blas@mail.com","Blas", "Blas", null),
         User(0, "fernando@mail.com","Fernando", "Fernando", null),
-        User(0, "jose@mail.com","Jose", "Jose", null)
+        User(0, "jose@mail.com","Jose", "Jose", null),
+        User(0, "ruben@mail.com","Ruben", "Rubén", null),
+        User(0, "juanelias@mail.com","Juan", "Juan Elías", null),
+        User(0, "manu@mail.com","Manu", "Manu", null),
+        User(0, "gerard@mail.com","Gerard", "Gerard", null),
+        User(0, "fran@mail.com","Fran", "Fran", null),
+        User(0, "emilio@mail.com","Emilio", "Emilio", null),
+        User(0, "dani@mail.com","Dani", "Dani", null),
+
     )
 
     // ROOM

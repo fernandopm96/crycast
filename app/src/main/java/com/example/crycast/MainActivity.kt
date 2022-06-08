@@ -32,24 +32,63 @@ lateinit var repository: UserRepository
 
 class MainActivity : ComponentActivity() {
 
+    suspend fun conectaSocket(){
+        Log.i("stomp","Corutina iniciada")
+        try {
+            val okHttpClient = OkHttpClient.Builder()
+                .callTimeout(Duration.ofMinutes(1))
+                .pingInterval(Duration.ofSeconds(10))
+                .connectTimeout(Duration.ofSeconds(10))
+                .build()
+
+            val test = OkHttpWebSocketClient(okHttpClient)
+            val connection = test.connect("ws://172.24.112.1:8080/chat")
+            val config = StompConfig()
+            //config.connectWithStompCommand = true
+            //config.connectionTimeout = 15.seconds
+            val stomp = connection.stomp(config)
+
+//            val subscription = stomp.subscribeText("/topic/messages")
+
+//            subscription.collect { msg ->
+//                println("Received: $msg")
+//            }
+
+            stomp.sendText("/app/test","FUNCIONA YA")
+
+            //val client = StompClient(OkHttpWebSocketClient())
+            // session = client.connect("ws://127.0.0.1:8080/chat")
+            //session.sendText("/topic/test","FUNCIONA YA")
+        }
+        catch (e:Exception){e.printStackTrace()}
+
+        //session.sendText("/topic/test", "Basic text message")
+
+//        mStompClient.topic("/topic/messages").subscribe { topicMessage: StompMessage ->
+//            println(topicMessage.payload)
+//        }
+
+
+        //mStompClient.send("/app/test","prueba").subscribe()
+        Log.i("stomp","mensaje enviado")
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
+
         setContent {
 
             CrycastTheme () {
+                runBlocking { conectaSocket() }
                 val navController = rememberNavController()
                 SetupNav(navController = navController)
             }
 
         }
-
-
-
     }
-
 
 
 }
