@@ -48,6 +48,7 @@ class MainActivity : ComponentActivity() {
             //config.connectionTimeout = 15.seconds
             val stomp = connection.stomp(config)
 
+
 //            val subscription = stomp.subscribeText("/topic/messages")
 
 //            subscription.collect { msg ->
